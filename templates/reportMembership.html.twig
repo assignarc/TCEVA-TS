@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="main report">
+		<div class="title">TCEVA Membership Listing</div>
+		<p>
+			(as of
+			{{ "now"|date("m/d/Y") }}
+			)
+		</p>
+		<div style="overflow-x: auto;">
+			<table class="tablebox tablestripedbw">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Address</th>
+						<th>Contact</th>
+						<th>Features</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for person in people %}
+						{% if person.status == 'M' %}
+							<tr>
+								<td>{{ person.lastName }}, {{ person.firstName }}</td>
+								<td>{{ person.addressLine1 ~  (person.addressLine2 ? '<br>' ~ person.addressLine2 : '')}}<br>{{ person.city }}, {{ person.state }} {{ person.postal }}</td>
+								<td>{{ person.phone }} {{ person.carrier ? '(' ~ person.carrier ~ ')' :''}}<br>{{ person.email }}<br>Emergency: {{ person.emergencyContact }} - {{ person.emergencyContactPhone }}</td>
+								<td>
+									Permissions: {{ person.newsAdmin ? 'Events' : '' }} {{ person.timeAdmin ? 'Time' : '' }} {{ person.userAdmin ? 'Web' : '' }}<br>
+									Certifications: 
+									{% for feature in person.features %}
+										{{ feature.featureName }}
+									{% endfor %}
+								</td>
+							</tr>
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}

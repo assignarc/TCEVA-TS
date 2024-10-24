@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="main">
+	<h2>Instructions Signing up for events</h2>
+	<p>
+		To signup for a new Event,
+		<ul>
+			<li>Click on the pencil icon in any day.
+				If you want to select a day for a different month, click on the < or > symbols next to the month.</li>
+			<li>In the popup, select the type of action you're signing up for.</li>
+			<li>In the popup, select the first person's name from the list.
+				Typically this is your name unless you are creating an event for another person.
+				<br>Select the plus icon to the right of the name.</li>
+			<li>If you want to signup another volunteer, please select their name from the list and hit plus again.</li>
+			<li>The date is already defined.  Its the date you selected initially</li>
+			<li>In the Note/Time field, put in the time for the event, or the time range desired.  Please use 24 hour time notation.</li>
+			<li>Hit "OK", to save the event</li>
+			<li>You should now see a event in the day that you selected. The number by the event is the number of volunteers signed up.</li>
+		</ul>
+	</p>
+	<p>
+		To Volunteer for an Existing Event
+		<ul>
+			<li>Click on the link for the event that you would like to join</li>
+			<li>Add yourself by selecting yourself from the pulldown and clicking the plus icon.</li>
+			<li>Update if necessary the time frame in the Note/Time field.</li>
+			<li>Hit "OK", to save the update</li>
+		</ul>
+	</p>
+	<p>
+		To Cancel an Event
+		<ul>
+			<li>To cancel the entire event, select the event on the calendar and select "Delete"</li>
+			<li>To remove your participation, but leave the event open, simply hit the "x" icon next to your name and hit "OK".
+			</li>
+		</ul>
+	</p>
+</div>
+{% endblock %}

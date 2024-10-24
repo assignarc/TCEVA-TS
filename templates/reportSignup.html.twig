@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="main report">
+		<div class="title">Meeting Signup Sheet</div>
+		<h4>
+			Quorum is {{ quorum }}
+		</h4>
+		<p>
+			(data as of{{ "now"|date("m/d/Y") }})
+		</p>
+
+		<table class="tableboxed">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th width="40%">Signature</th>
+					<th>Current Hours</th>
+					<th>Voting Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for activity in activities %}
+					<tr>
+						<td>{{ activity.personName }}</td>
+						<td></td>
+						<td style="text-align:right">{{ '%.2f'|format(activity.hours) }}</td>
+						<td>{{ activity.hours >= 16 ? 'Voting' : 'NonVoting' }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

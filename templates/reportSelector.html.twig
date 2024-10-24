@@ -1,0 +1,165 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<script>
+function generate(type, year, period){
+	document.getElementById("submitForm").action = "/report/show";
+	document.getElementById("year").value = year;
+	document.getElementById("period").value = period;
+	document.getElementById("reportType").value = type;
+	document.getElementById("submitForm").submit();
+}
+</script>
+<div class="main">
+    {% if loggedInUser is not null %}
+        {% set currentYear = "now"|date('Y') %}
+
+        <form id="submitForm" method="post">
+            <input type="hidden" id="year" name="year">
+            <input type="hidden" id="period" name="period">
+            <input type="hidden" id="reportType" name="reportType">
+        </form>
+
+        <h2>Select Report to Generate</h2>
+        <div>
+            <table>
+                <tr>
+                    <td><h3>Hours by Type</h3></td>
+                    <td>
+                        <label for="hbtYearChoice">Year</label>
+                        <select id="hbtYearChoice">
+                            {% for year in range(2017, currentYear) %}
+                                <option value="{{ year }}" {{ year == currentYear ? 'selected' : '' }}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label for="hbtPeriodChoice">Period</label>
+                        <select id="hbtPeriodChoice">
+                            <option value="y">Year to Date</option>
+                            <option value="q1">1st Quarter</option>
+                            <option value="q2">2nd Quarter</option>
+                            <option value="q3">3rd Quarter</option>
+                            <option value="q4">4th Quarter</option>
+                            <option value="m1">January</option>
+                            <option value="m2">February</option>
+                            <option value="m3">March</option>
+                            <option value="m4">April</option>
+                            <option value="m5">May</option>
+                            <option value="m6">June</option>
+                            <option value="m7">July</option>
+                            <option value="m8">August</option>
+                            <option value="m9">September</option>
+                            <option value="m10">October</option>
+                            <option value="m11">November</option>
+                            <option value="m12">December</option>
+                        </select>
+                    </td>
+                    <td>
+                        <a href="javascript:generate('HoursByType', document.getElementById('hbtYearChoice').value, document.getElementById('hbtPeriodChoice').value)"><h3><i>Generate</i></h3></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"><hr size="5" color="black"></td>
+                </tr>
+                <tr>
+                    <td><h3>Person Hours by Type</h3></td>
+                    <td>
+                        <label for="phbtYearChoice">Year</label>
+                        <select id="phbtYearChoice">
+                            {% for year in range(2017, currentYear) %}
+                                <option value="{{ year }}" {{ year == currentYear ? 'selected' : '' }}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label for="phbtPeriodChoice">Period</label>
+                        <select id="phbtPeriodChoice">
+                            <option value="y">Year to Date</option>
+                            <option value="q1">1st Quarter</option>
+                            <option value="q2">2nd Quarter</option>
+                            <option value="q3">3rd Quarter</option>
+                            <option value="q4">4th Quarter</option>
+                            <option value="m1">January</option>
+                            <option value="m2">February</option>
+                            <option value="m3">March</option>
+                            <option value="m4">April</option>
+                            <option value="m5">May</option>
+                            <option value="m6">June</option>
+                            <option value="m7">July</option>
+                            <option value="m8">August</option>
+                            <option value="m9">September</option>
+                            <option value="m10">October</option>
+                            <option value="m11">November</option>
+                            <option value="m12">December</option>
+                        </select>
+                    </td>
+                    <td>
+                        <a href="javascript:generate('PersonHoursByType', document.getElementById('phbtYearChoice').value, document.getElementById('phbtPeriodChoice').value)"><h3><i>Generate</i></h3></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"><hr size="5" color="black"></td>
+                </tr>
+                <tr>
+                    <td><h3>Monthly Sign-up Sheet</h3></td>
+                    <td></td>
+                    <td>
+                        <a href="javascript:generate('MonthlySignUp', '', '')"><h3><i>Generate</i></h3></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"><hr size="5" color="black"></td>
+                </tr>
+                <tr>
+                    <td><h3>Volunteer Report</h3></td>
+                    <td>
+                        <label for="copYearChoice">Year</label>
+                        <select id="copYearChoice">
+                            {% for year in range(2017, currentYear) %}
+                                <option value="{{ year }}" {{ year == currentYear ? 'selected' : '' }}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label for="copPeriodChoice">Period</label>
+                        <select id="copPeriodChoice">
+                            <option value="y">Year to Date</option>
+                            <option value="q1">1st Quarter</option>
+                            <option value="q2">2nd Quarter</option>
+                            <option value="q3">3rd Quarter</option>
+                            <option value="q4">4th Quarter</option>
+                            <option value="m1">January</option>
+                            <option value="m2">February</option>
+                            <option value="m3">March</option>
+                            <option value="m4">April</option>
+                            <option value="m5">May</option>
+                            <option value="m6">June</option>
+                            <option value="m7">July</option>
+                            <option value="m8">August</option>
+                            <option value="m9">September</option>
+                            <option value="m10">October</option>
+                            <option value="m11">November</option>
+                            <option value="m12">December</option>
+                        </select>
+                    </td>
+                    <td>
+                        <a href="javascript:generate('Volunteer', document.getElementById('copYearChoice').value, document.getElementById('copPeriodChoice').value)"><h3><i>Generate</i></h3></a>
+                    </td>
+                </tr>
+                {% if loggedInUser.userAdmin %}
+                    <tr>
+                        <td colspan="3"><hr size="5" color="black"></td>
+                    </tr>
+                    <tr>
+                        <td><h3>Membership Report</h3></td>
+                        <td></td>
+                        <td>
+                            <a href="javascript:generate('Membership', '', '')"><h3><i>Generate</i></h3></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"><hr size="5" color="black"></td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

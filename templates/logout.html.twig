@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="main" >
+	<h3 style="color:black;background-color:LightCoral;"><c:out value='${errorMsg }' /></h3>
+</div>
+<script>
+	window.parent.location.reload(false);
+</script>
+{% endblock %}

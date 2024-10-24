@@ -1,0 +1,262 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <script type="text/javascript">
+    function editPerson(perStr) {
+        unsetPersonVars();
+        var person = JSON.parse(atob(perStr));
+        document.getElementById("personIdChoice").value = person.id;
+        document.getElementById("personFirstNameChoice").value = person.firstName;
+        document.getElementById("personLastNameChoice").value = person.lastName;
+        document.getElementById("personAddressLine1Choice").value = person.addressLine1;
+        document.getElementById("personAddressLine2Choice").value = person.addressLine2;
+        document.getElementById("personCityChoice").value = person.city;
+        document.getElementById("personStateChoice").value = person.state;
+        document.getElementById("personPostalChoice").value = person.postal;
+        document.getElementById("personPhoneChoice").value = person.phone;
+        document.getElementById("personCarrierChoice").value = person.carrier;
+        document.getElementById("personEmailChoice").value = person.email;
+        document.getElementById("emergencyContactChoice").value = person.emergencyContact;
+        document.getElementById("emergencyContactPhoneChoice").value = person.emergencyContactPhone;
+        document.getElementById("birthMonthChoice").value = person.birthMonth;
+        document.getElementById("birthDayChoice").value = person.birthDay;
+        document.getElementById("loginChoice").value = person.login;
+        document.getElementById("renewYearChoice").value = person.renewYear;
+        document.getElementById("adminChoice").checked = person.userAdmin;
+        document.getElementById("timeChoice").checked = person.timeAdmin;
+        document.getElementById("copChoice").checked = person.copAdmin;
+        document.getElementById("eventsChoice").checked = person.newsAdmin;
+        document.getElementById("statusChoice").value = person.status;
+        for (var i = 0; i < person.features.length; i++) {
+            var pf = person.features[i];
+            document.getElementById("Feature_" + pf.featureName + "_idChoice").value = pf.id;
+            document.getElementById("Feature_" + pf.featureName + "_Choice").checked = true;
+            document.getElementById("Feature_" + pf.featureName + "_valueChoice").value = pf.featureLabel;
+            document.getElementById("Feature_" + pf.featureName + "_dateChoice").value = pf.featureDate;
+        }
+        modalPopup();
+        showtab(null, "basic");
+    }
+    function unsetPersonVars(){
+        document.getElementById("personIdChoice").value = '';
+        document.getElementById("personFirstNameChoice").value = '';
+        document.getElementById("personLastNameChoice").value = '';
+        document.getElementById("personAddressLine1Choice").value = '';
+        document.getElementById("personAddressLine2Choice").value = '';
+        document.getElementById("personCityChoice").value = '';
+        document.getElementById("personStateChoice").value = '';
+        document.getElementById("personPostalChoice").value = '';
+        document.getElementById("personPhoneChoice").value = '';
+        document.getElementById("personCarrierChoice").value = '';
+        document.getElementById("personEmailChoice").value ='';
+        document.getElementById("emergencyContactChoice").value = '';
+        document.getElementById("emergencyContactPhoneChoice").value = '';
+        document.getElementById("birthMonthChoice").value = '';
+        document.getElementById("birthDayChoice").value = '';
+        document.getElementById("loginChoice").value = '';
+        document.getElementById("renewYearChoice").value = '';
+        document.getElementById("adminChoice").checked = false;
+        document.getElementById("timeChoice").checked = false;
+        document.getElementById("copChoice").checked = false;
+        document.getElementById("eventsChoice").checked = false;
+        document.getElementById("statusChoice").value = '';
+       
+        {% for feature in features %}
+        document.getElementById("Feature_{{ feature.name }}_idChoice").value ='';
+        document.getElementById("Feature_{{ feature.name }}_Choice").checked = false;
+        document.getElementById("Feature_{{ feature.name }}_valueChoice").value = '';
+        document.getElementById("Feature_{{ feature.name }}_dateChoice").value = '';
+        {% endfor %}
+    }
+    
+    function showGroup() {
+        var i;
+        var x = document.getElementsByClassName("MemberGroup");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+            var cl = x[i].className;
+            cl = cl.replace("tableEven", "");
+            cl = cl.replace("tableOdd", "");
+            x[i].className = cl;
+        }
+        var show = document.getElementById("memberType").value;
+        x = document.getElementsByClassName(show);
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "";
+            var cl = x[i].className;
+            if (i % 2 == 0)
+                cl += " tableEven";
+            else
+                cl += " tableOdd";
+            x[i].className = cl;
+        }
+    }
+    function showtab(event, show) {
+        if (event != null)
+            event.preventDefault();
+        var x = document.getElementsByClassName("tabbed");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        var y = document.getElementsByClassName(show);
+        for (i = 0; i < y.length; i++) {
+            y[i].style.display = "";
+        }
+        return true;
+    }
+    </script>
+    
+    <div class="main">
+        <h3 style="color: black; background-color: LightCoral;">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+        </h3>
+        <div class="title">Member Administration</div>
+    
+        {% if admin %}
+            Person Type
+            <select id="memberType" onchange="showGroup()">
+                <option value="grp_M" selected>Member</option>
+                <option value="grp_A">Associate</option>
+                <option value="grp_G">Guest</option>
+                <option value="grp_I">Inactive</option>
+            </select>
+            <br>
+            <a href="javascript:editPerson('{{ emptyPerson.json }}');">Add New Person</a>
+            <br/>
+        {% endif %}
+       
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                  
+                    <th>Contact</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            {% for person in people %}
+                <tr class="MemberGroup grp_{{ person.status }}">
+                    <td>
+                        <div class="membername">
+                            {{ person.lastName }}, {{ person.firstName }} 
+                        </div>
+                        <div class="memberaddress">
+                            {{ person.addressLine1 ~  (person.addressLine2 ? '<br>' ~ person.addressLine2 : '')}}<br>{{ person.city }}, {{ person.state }} {{ person.postal }}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="memberphone">
+                            {{ person.phone }} {{ person.carrier ? '(' ~ person.carrier ~ ')' :''}}
+                        </div>
+                        <div class="memberemail">
+                            {{ person.email }}</td>
+                        </div>
+                    <td>
+                        <a href="javascript:editPerson('{{ person.json }}');">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    
+    <!-- Modal edit panel -->
+    <div id="modalPopup" class="modal">
+        <form id="modalForm" class="modal-content animate" action="/admin/edit" method="post">
+            <div class="container">
+                <div>
+                    <button class="tabbtn" onclick="showtab(event, 'basic');">Basic</button>
+                    <button class="tabbtn" onclick="showtab(event, 'extra');">Extra</button>
+                    <button class="tabbtn" onclick="showtab(event, 'club');">Club</button>
+                    <div class="tabbed basic">
+                        <input type="hidden" id="submitChoice" name="submitChoice"/>
+                        <input type="hidden" id="personIdChoice" name="personIdChoice" />
+                        <br> <span class="psw"><label for="personFirstNameChoice">First Name:</label> <input type="text" id="personFirstNameChoice" name="personFirstNameChoice" required /></span>
+                        <br> <span class="psw"><label for="personLastNameChoice">Last Name:</label> <input type="text" id="personLastNameChoice" name="personLastNameChoice" required /></span>
+                        <br> <span class="psw"><label for="personAddressLine1Choice">Address Line 1:</label> <input type="text" id="personAddressLine1Choice" name="personAddressLine1Choice" /></span>
+                        <br> <span class="psw"><label for="personAddressLine2Choice">Address Line 2:</label> <input type="text" id="personAddressLine2Choice" name="personAddressLine2Choice" /></span>
+                        <br> <span class="psw"><label for="personCityChoice">City:</label> <input type="text" id="personCityChoice" name="personCityChoice" /></span>
+                        <br> <span class="psw"><label for="personStateChoice">State:</label> <input type="text" id="personStateChoice" name="personStateChoice" /></span>
+                        <br> <span class="psw"><label for="personPostalChoice">Postal:</label> <input type="text" id="personPostalChoice" name="personPostalChoice" /></span>
+                        <br> <span class="psw"><label for="personPhoneChoice">Phone:</label> <input type="text" id="personPhoneChoice" name="personPhoneChoice" /></span>
+                        <br> <span class="psw"><label for="personCarrierChoice">Carrier:</label> <input type="text" id="personCarrierChoice" name="personCarrierChoice" /></span>
+                        <br> <span class="psw"><label for="personEmailChoice">Email:</label> <input type="text" id="personEmailChoice" name="personEmailChoice" /></span>
+                    </div>
+                    <div class="tabbed extra">
+                        <span class="psw"><label for="emergencyContactChoice">Emer. Contact:</label> <input type="text" id="emergencyContactChoice" name="emergencyContactChoice" /></span>
+                        <br> <span class="psw"><label for="emergencyContactPhoneChoice">Emer. Phone:</label> <input type="text" id="emergencyContactPhoneChoice" name="emergencyContactPhoneChoice" /></span>
+                        <br> <span class="psw"><label for="birthMonthChoice">Birth Month:</label> <select id="birthMonthChoice" name="birthMonthChoice">
+                            <option value="Jan">January</option>
+                            <option value="Feb">February</option>
+                            <option value="Mar">March</option>
+                            <option value="Apr">April</option>
+                            <option value="May">May</option>
+                            <option value="Jun">June</option>
+                            <option value="Jul">July</option>
+                            <option value="Aug">August</option>
+                            <option value="Sep">September</option>
+                            <option value="Oct">October</option>
+                            <option value="Nov">November</option>
+                            <option value="Dec">December</option>
+                        </select></span>
+                        <br> <span class="psw"><label for="birthDayChoice">Birth Day:</label> <input type="number" id="birthDayChoice" name="birthDayChoice" min="1" max="31" step="1" pattern="[0-9]*" /></span>
+                        <br> <span class="psw"><label for="loginChoice">Login:</label>
+                            <input type="text" id="loginChoice" name="loginChoice" readonly /></span>
+                        <br> <span class="psw"><label for="passwdChoice">Password:</label> <input type="password" id="passwdChoice" name="passwdChoice" /></span>
+                    </div>
+                    <div class="tabbed club">
+                        <span class="psw"><label for="renewYearChoice">Renew Year:</label>
+                            <input type="number" id="renewYearChoice" name="renewYearChoice" min="2019" step="1" max="2030" pattern="[0-9]*" /></span>
+                        <br> <span class="psw"><label for="statusChoice">Active Status:</label> <select id="statusChoice" name="statusChoice">
+                            <option value="M" selected>Member</option>
+                            <option value="A">Associate</option>
+                            <option value="G">Guest</option>
+                            <option value="I">Inactive</option>
+                        </select></span>
+                        <br><hr>
+                        Privileges
+                        <br><label for="adminChoice">Website Admin</label>
+                            <input id="adminChoice" name="adminChoice" type="checkbox"/>
+                        <br><label for="copChoice">Signups</label>
+                            <input id="copChoice" name="copChoice" type="checkbox"/>
+                        <br><label for="timeChoice">Time</label>
+                            <input id="timeChoice" name="timeChoice" type="checkbox"/>
+                        <br><label for="eventsChoice">Events</label>
+                            <input id="eventsChoice" name="eventsChoice" type="checkbox"/>
+                        <br><hr>
+                        Certifications
+                        <br>
+                        {% for feature in features %}
+                            <span class="psw">
+                                <input type="hidden" id="Feature_{{ feature.name }}_idChoice" name="Feature_{{ feature.name }}_idChoice" value=""/>
+                                <div class="boxed">
+                                    <input type="checkbox" id="Feature_{{ feature.name }}_Choice" name="Feature_{{ feature.name }}_Choice" />
+                                    <label class="shortLeft" for="Feature_{{ feature.name }}_Choice">{{ feature.name }}</label>
+                                </div>
+                                <label class="short" for="Feature_{{ feature.name }}_dateChoice">Date</label>
+                                <input type="date" id="Feature_{{ feature.name }}_dateChoice" name="Feature_{{ feature.name }}_dateChoice" />
+                                <label class="short" for="Feature_{{ feature.name }}_valueChoice">ID</label>
+                                <input type="text" id="Feature_{{ feature.name }}_valueChoice" name="Feature_{{ feature.name }}_valueChoice" />
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="container" style="background-color: #f1f1f1">
+                <button onclick="setAction('Save');" type="button" class="savebtn">Save</button>
+                <button onclick="setAction('Delete');" type="button" class="deletebtn">Delete</button>
+                <button type="button" class="cancelbtn" onclick="document.getElementById('modalPopup').style.display='none'">Cancel</button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        {% if admin %}
+            showGroup();
+        {% endif %}
+    </script>
+{% endblock %}

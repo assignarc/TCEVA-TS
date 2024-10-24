@@ -1,0 +1,61 @@
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, viewport-fit=cover">
+		<title>
+            {% block title %}
+                Trophy Club Emergency Volunteer Association
+            {% endblock %}
+        </title>
+		<link rel="stylesheet" type="text/css" href="/css/style.css">
+		<script type="text/javascript" src="/js/modal.js"></script>
+       
+	</head>
+	<body style="margin:0;height:100%">
+		<div class="topnav" id="Topnav">
+			<a href="https://www.tceva.us">
+			<img  src="/images/TCEVA-2023-logo.png" style="margin:auto;max-height:30px;float:left">&nbsp;&nbsp;
+				Home
+			</a>
+			 {% set loggedInUser =  app.session.get('loggedInUser') %}
+			 {% if loggedInUser  is not null %}
+    			<a href="/action/edit?reload={{date()| date('U') * 1000 }}">Sign Up!</a> 
+				<a href="/report/selector?reload={{date()| date('U') * 1000 }}" >Reports</a>
+				<a href="/time/edit?reload={{date()| date('U') * 1000 }}" >Time</a> 
+				<a href="/admin/edit?reload={{date()| date('U') * 1000 }}">Members</a>
+				<a href="/logout">Logout</a>
+				<a style="float:right;" href="#">{{loggedInUser.lastName ~ ', ' ~ loggedInUser.firstname}}</a>
+    		{% else %}
+                <a href="/login/page" >Login</a>
+            {% endif %}
+			
+			
+			<a href="javascript:void(0);" class="icon" onclick="myFunction()">☰</a>
+		</div>
+		<div>
+			{% if app.environment == 'prod' %}
+					
+			{% else %}
+				<H3 style="margin:auto; color:red;text-align:center">TEST SITE</div><br>
+			{% endif %}
+		  
+           {% block body %}		{% endblock %}
+		</div>
+		<div class="bottomBar" style="text-align:center">
+			
+		</div>
+		<script>
+			function myFunction() {
+                var x = document.getElementById("Topnav");
+                if (x.className === "topnav") {
+                        x.className += " responsive";
+                    } 
+                else{
+                        x.className = "topnav";
+                    }
+                }
+		</script>
+		<div class="bottom">
+			©Trophy Club Emergency Volunteers Association
+		</div>
+	</body>
+</html>

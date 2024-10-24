@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<body>
+	<div class="main report">
+		<div class="title">Hours by Person - {{ timeLabel }}</div>
+		<p>
+			(as of
+			{{ "now"|date("m/d/Y") }}
+			)
+		</p>
+		<div style="overflow-x: auto;">
+			<table>
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Activity Type</th>
+						{% for cnt in offsetMonth..(offsetMonth + numberOfMonths - 1) %}
+							<th>{{ months[cnt-1] }}</th>
+						{% endfor %}
+						<th>Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for title in titles %}
+						<tr class="{{ title[1] == 'Total' ? 'totalRow' : '' }}">
+							<td>{{ title[0] }}</td>
+							<td>{{ title[1] }}</td>
+							{% set row = rows[loop.index0] %}
+							{% for cnt in offsetMonth..(offsetMonth + numberOfMonths - 1) %}
+								<td style="text-align:right">{{ row[cnt-1] != 0 ? '%.2f'|format(row[cnt-1]) : '' }}</td>
+							{% endfor %}
+							<td style="text-align:right">{{ row[12] != 0 ? '%.2f'|format(row[12]) : '' }}</td>
+						</tr>
+					{% endfor %}
+					<tr class="totals">
+						<td>Total</td>
+						<td></td>
+						{% for cnt in offsetMonth..(offsetMonth + numberOfMonths - 1) %}
+							<td  style="text-align:right">{{ totals[cnt-1] != 0 ? '%.2f'|format(totals[cnt-1]) : '' }}</td>
+						{% endfor %}
+						<td style="text-align:right">{{ totals[12] != 0 ? '%.2f'|format(totals[12]) : '' }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}

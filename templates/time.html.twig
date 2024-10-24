@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<script>
+		function redraw(box) {
+        document.getElementById("showAllChoice").value = box.checked;
+        document.getElementById("activityIdChoice").value = -1;
+        document.getElementById("submitChoice").value = "";
+        document.getElementById("modalForm").submit();
+    }
+	</script>
+
+
+	<script type="text/javascript">
+		// called by the user selecting the pencil.  Loads the popup with selected values
+      function editTimeEntry(actStr) {
+          var act = JSON.parse(atob(actStr));
+          document.getElementById('activityIdChoice').value = act.id;
+          document.getElementById('personChoice').value = act.personId;
+          document.getElementById('activityTypeChoice').value = act.activityId;
+          document.getElementById('dateChoice').value = act.day;
+          document.getElementById('hoursChoice').value = act.hours.toFixed(1);
+          document.getElementById('noteChoice').value = act.note;
+          modalPopup();
+      }
+
+      function showPerson() {
+          var i;
+          var x = document.getElementsByClassName("PerAll");
+          for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+            var cl = x[i].className;
+            cl = cl.replace("tableEven", "");
+            cl = cl.replace("tableOdd", "");
+            x[i].className = cl;
+          }
+          var show = document.getElementById("perSelector").value;
+          x = document.getElementsByClassName(show);
+          for (i = 0; i < x.length; i++) {
+            x[i].style.display = "";
+            var cl = x[i].className;
+            if (i % 2 == 0) 
+            cl += " tableEven";
+            else 
+            cl += " tableOdd";
+            x[i].className = cl;
+          }
+      }
+	</script>
+	<div class="main">
+		<h3 style="color:black;background-color:LightCoral;">
+			{% for label, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="flash-{{ label }}">
+						{{ message }}
+					</div>
+				{% endfor %}
+			{% endfor %}
+		</h3>
+		<div>
+			<div class="title">Time Entry</div>
+			<a class="instruction" href="/pages/timeEntryInstructions.html">Instructions</a>
+		</div>
+		<div style="clear: both;"></div>
+		{% if user.timeAdmin %}
+			<input type="checkbox" id="showAllUsers" name="showAllUsers" onclick="redraw(this)" {{ allUsers == 'checked' ? 'checked' : '' }}>
+			<label for="showAllUsers">Show All Users</label>
+			<br>
+		{% endif %}
+		<a href="javascript:editTimeEntry('{{ emptyActivity.json}}')">Add New Time Entry</a>
+		<table>
+			<thead>
+				<tr>
+					<th>
+						{% if allUsers == 'checked' %}
+							<select id="perSelector" onchange="showPerson()">
+								<option value="PerAll" selected>All</option>
+								{% for person in people %}
+									<option value="Per{{ person.id }}">{{ person.lastName }},
+										{{ person.firstName }}</option>
+								{% endfor %}
+							</select>
+						{% else %}
+							Name
+						{% endif %}
+					</th>
+					<th width="40%">Activity</th>
+					<th>Date</th>
+					<th>Hours</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			{% for activity in activities %}
+				<tr class="PerAll Per{{ activity.personId }} table{{ loop.index is even ? 'Even' : 'Odd' }}">
+					<td>{{ activity.personName }}</td>
+					<td>
+						{{ activity.activityName }}<br>
+						<p class="details">{{ activity.note == '' ? 'N/A' : activity.note }}</p>
+					</td>
+					<td>{{ activity.day|date('Y-m-d') }}</td>
+					<td class="hours">{{ '%.2f'|format(activity.hours) }}</td>
+					<td>
+						<a href="javascript:editTimeEntry('{{ activity.json }}');">Edit</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
+	<div id="modalPopup" class="modal">
+		<form id="modalForm" class="modal-content animate" action="/time/edit" method="post">
+			<div class="container">
+				<input type="hidden" id="submitChoice" name="submitChoice"/>
+				<input type="hidden" id="showAllChoice" name="showAllChoice"/>
+				<input type="hidden" id="activityIdChoice" name="activityIdChoice">
+				{% if user.timeAdmin and allUsers == 'checked' %}
+					<label for="personChoice">Select Person:</label>
+					<select class="form-control" id="personChoice" name="personChoice" required>
+						<option value="">--Select a Person--</option>
+						{% for person in people %}
+							<option value="{{ person.id }}">{{ person.lastName }},
+								{{ person.firstName }}</option>
+						{% endfor %}
+					</select>
+				{% else %}
+					<label for="personChoice">Select Person:</label>
+					<input type="hidden" id="personChoice" name="personChoice" value="{{ user.id }}"/>
+					{{ user.lastName }}, {{ user.firstName }}
+				{% endif %}
+				<br><label for="activityTypeChoice">Select Activity Type:</label>
+				<select id="activityTypeChoice" name="activityTypeChoice" required>
+					<option value="">--Select an Activity--</option>
+					{% for activityType in activityTypes %}
+						<option value="{{ activityType.id }}">{{ activityType.name }}</option>
+					{% endfor %}
+				</select>
+				<br><label for="dateChoice">Select Date:</label>
+				<input type="date" id="dateChoice" name="dateChoice" required>
+				<br><label for="hoursChoice">Select Hours:</label>
+				<input type="number" id="hoursChoice" name="hoursChoice" step="0.1" value="1.0" required>
+				<br><label for="noteChoice">Note:</label>
+				<input type="text" id="noteChoice" name="noteChoice" required>
+			</div>
+			<div class="container" style="background-color: #f1f1f1">
+				<button onclick="setAction('Save');" type="button" class="savebtn">Save</button>
+				<button onclick="setAction('Delete');" type="button" class="deletebtn">Delete</button>
+				<button type="button" class="cancelbtn" onclick="document.getElementById('modalPopup').style.display='none'">Cancel</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}

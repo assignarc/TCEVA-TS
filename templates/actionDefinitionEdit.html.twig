@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<script type="text/javascript">
+    function editAd(eventStr) {
+        var actionDef = JSON.parse(atob(eventStr));
+        document.getElementById("adIdChoice").value = actionDef.id;
+        document.getElementById("nameChoice").value = actionDef.name;
+        document.getElementById("descriptionChoice").value = actionDef.description;
+        document.getElementById("restrictChoice").value = actionDef.restrictionType;
+        document.getElementById("restrictDowChoice").value = actionDef.restrictionValue;
+        document.getElementById("restrictDateChoice").value = actionDef.restrictionDate;
+
+        showGroup(actionDef.restrictionType);
+        modalPopup();
+    }
+
+    function showGroup(opt) {
+        var i;
+        var elements = document.getElementsByClassName("restrict");
+        for (i = 0; i < elements.length; i++) {
+            elements[i].style.display = "none";
+        }
+        elements = document.getElementsByClassName("restrict-" + opt);
+        for (i = 0; i < elements.length; i++) {
+            elements[i].style.display = "";
+        }
+    }
+</script>
+
+<div class="main">
+    <h3 style="color: black; background-color: LightCoral;">
+		{% for label, messages in app.flashes %}
+			{% for message in messages %}
+				<div class="flash-{{ label }}">
+					{{ message }}
+				</div>
+			{% endfor %}
+		{% endfor %}
+    </h3>
+    <div class="title">Define Signup Events</div>
+    <br>
+    <a href="javascript:editAd('{{ emptyAd.json}}');">Add New Entry</a><br>
+    <table class="tablestriped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Restriction</th>
+                <th>Restriction Value</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for actionDef in actionDefinitions %}
+                <tr>
+                    <td>{{ actionDef.name }}</td>
+                    <td>{{ actionDef.description }}</td>
+                    <td>
+                        {% if actionDef.restrictionType == 0 %}
+                            None
+                        {% elseif actionDef.restrictionType == 1 %}
+                            Day Of Week
+                        {% elseif actionDef.restrictionType == 2 %}
+                            Specific Date
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if actionDef.restrictionType == 1 %}
+							{% set daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
+							{{ daysOfWeek[actionDef.restrictionValue-1] }}
+                        {% elseif actionDef.restrictionType == 2 %}
+                            {{ actionDef.restrictionDate|date('Y-m-d') }}
+                        {% endif %}
+                    </td>
+                    <td><a href="javascript:editAd('{{ actionDef.json }}');">Edit</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="modalPopup" class="modal">
+    <form id="modalForm" class="modal-content animate" action="/action/definition/edit" method="post">
+        <div class="container">
+            <input type="hidden" id="submitChoice" name="submitChoice" />
+            <input type="hidden" id="adIdChoice" name="adIdChoice" />
+            <input type="hidden" id="adActionChoice" name="adActionChoice" />
+            <span class="psw">
+                <label for="nameChoice">Name:</label>
+                <input type="text" id="nameChoice" name="nameChoice" required />
+            </span>
+            <br />
+            <span class="psw">
+                <label for="descriptionChoice">Description:</label>
+                <input type="text" id="descriptionChoice" name="descriptionChoice" />
+            </span>
+            <br />
+            <span class="psw">
+                <label for="restrictChoice">Date Restriction:</label>
+                <select id="restrictChoice" name="restrictChoice" onChange="showGroup(this.value)">
+                    <option value="0">None</option>
+                    <option value="1">Day Of Week</option>
+                    <option value="2">Date</option>
+                </select>
+            </span>
+            <br />
+            <div class="form-group restrict restrict-0"></div>
+            <div class="form-group restrict restrict-1">
+                <label for="restrictDowChoice"> Restriction:</label>
+                <select id="restrictDowChoice" name="restrictDowChoice">
+                    <option value="7">Sunday</option>
+                    <option value="1">Monday</option>
+                    <option value="2">Tuesday</option>
+                    <option value="3">Wednesday</option>
+                    <option value="4">Thursday</option>
+                    <option value="5">Friday</option>
+                    <option value="6">Saturday</option>
+                </select>
+            </div>
+            <div class="form-group restrict restrict-2">
+                <label for="restrictDateChoice"> Restriction:</label>
+                <input type="date" id="restrictDateChoice" name="restrictDateChoice" />
+            </div>
+        </div>
+        <div class="container" style="background-color: #f1f1f1">
+            <button onclick="setAction('Save');" type="button" class="savebtn">Save</button>
+            <button onclick="setAction('Delete');" type="button" class="deletebtn">Delete</button>
+            <button type="button" class="cancelbtn" onclick="document.getElementById('modalPopup').style.display='none'">Cancel</button>
+        </div>
+    </form>
+</div>	
+{% endblock %}

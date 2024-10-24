@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<script type="text/javascript">
+		function showGroup() {
+			var i;
+			var x = document.getElementsByClassName("vol");
+			for (i = 0; i < x.length; i++) {
+				x[i].style.display = "none";
+			}
+			var show = document.getElementById("volType").value;
+			x = document.getElementsByClassName(show);
+			for (i = 0; i < x.length; i++) {
+				x[i].style.display = "";
+			}
+		}
+	</script>
+
+	<div class="main report">
+		<div class="title">Volunteer Events</div>
+		<br>
+		<br> Volunteer type:
+		<select id="volType" onchange="showGroup()">
+			<option value="vol" selected>All</option>
+			{% for actionDefinition in actionDefinitions %}
+				<option value="vol_{{ actionDefinition.id }}">{{ actionDefinition.name }}</option>
+			{% endfor %}
+		</select>
+		<br>
+		<br>
+		<p>
+			(as of
+			{{ "now"|date("m/d/Y") }}
+			)
+		</p>
+		<div style="overflow-x: auto;">
+			<table>
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Type</th>
+						<th>Members</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for action in actions %}
+						<tr class="vol vol_{{ action.actionDefinition }}">
+							<td>{{ action.day|date("m/d/Y") }}</td>
+							<td>{{ action.actionName }}</td>
+							<td>
+								{% for person in action.persons %}
+									{{ person.lastName }}, {{ person.firstName }}
+								{% endfor %}
+							</td>
+							<td>{{ action.note }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}

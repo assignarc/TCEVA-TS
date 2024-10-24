@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+	<div class="main">
+		<div class="title">The Town of Trophy Club No Soliciting Yard Sign</div>
+		<table class="sign">
+			<tr>
+				<td><img src="../images/NoSolicitationSign.jpg" height="250"
+					width="250" /></td>
+				<td colspan="2"><p>
+						Signs meet Trophy Club Sign Ordinance restrictions and No-Knock
+						Ordinance requirements. <br> Proceeds benefit TCEVA and go
+						directly to support the community and Trophy Club First
+						Responders. <br> <br> We will place your sign(s) at your
+						front door within 5 business days of the order (Trophy Club
+						residents only please). <br> <br> $1.00 handling fee
+						will be added to your cart at check out.
+					</p> <br> <br> <!-- PAYPAL LINK -->
+					<form target="paypal"
+						action="https://www.paypal.com/cgi-bin/webscr" method="post">
+						<input type="hidden" name="cmd" value="_s-xclick"> <input
+							type="hidden" name="hosted_button_id" value="VZK7WBAVRGFCQ">
+						<table>
+							<tr>
+								<td><input type="hidden" name="on0"
+									value="Three sign options available for your donation:">Three
+									sign options available for your donation:</td>
+							</tr>
+							<tr>
+								<td><select name="os0" class="ppselect">
+										<option value="Stamped Aluminum Sign on 24 inch Stake">Stamped
+											Aluminum Sign on 24 inch Stake $15.00 USD</option>
+										<option value="Stamped Aluminum Sign for Wall Mount">Stamped
+											Aluminum Sign for Wall Mount $10.00 USD</option>
+										<option value="Removable Adhesive Window Decal">Removable
+											Adhesive Window Decal $5.00 USD</option>
+								</select></td>
+							</tr>
+						</table>
+						<input type="hidden" name="currency_code" value="USD"> <input
+							type="image"
+							src="https://www.paypalobjects.com/en_US/i/btn/btn_cart_LG.gif"
+							border="0" name="submit"
+							alt="PayPal - The safer, easier way to pay online!"> <img
+							alt="" border="0"
+							src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+							width="1" height="1">
+					</form> <br> <br> Please visit the Town of Trophy Club site for
+					more information and remember to <a
+					href="http://www.trophyclub.org/departments/community-development/no-knock-address-registry.html"
+					target="_blank">register</a> on the No-Knock Address Registry site.
+					<br> <br> <a href="mailto:tceva.trophyclub@gmail.com">Contact
+						us</a> for a cash or check delivery, or questions.</td>
+			</tr>
+		</table>
+
+	</div>
+{% endblock %}

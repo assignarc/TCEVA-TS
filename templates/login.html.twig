@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+    <script>
+        function resetPw() {
+            modalPopdown();
+            document.getElementById("modalPasswd").style.display = 'block';
+        }
+    </script>
+    <div class="main"></div>
+    <div id="modalPopup" class="modal">
+        <form class="modal-content animate" action="/login" method="post">
+            <div class="container">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="flash-{{ label }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="container">
+                <input type="hidden" name="action" value="login" />
+                <span class="psw">
+                    <label for="userName"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" name="userName" required>
+                </span>
+                <br>
+                <span class="psw">
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" required>
+                </span>
+            </div>
+            <div class="container" style="background-color: #f1f1f1">
+                <button class="loginbtn" type="submit">Login</button>
+                <button type="button" onclick="document.getElementById('modalPopup').style.display='none'" class="cancelbtn">Cancel</button>
+                <br/><br/>
+                <span>Forgot <a href="javascript:resetPw();">password?</a></span>
+            </div>
+        </form>
+    </div>
+
+    <div id="modalPasswd" class="modal">
+        <form class="modal-content animate" action="/login" method="post">
+            <div class="container">
+                Enter your user name below. <br>If an email is on file with TCEVA, a new password will be emailed to you.
+                <input type="hidden" name="action" value="reset" />
+                <span class="psw">
+                    <label for="userName"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" name="userName" required>
+                </span>
+            </div>
+            <div class="container" style="background-color: #f1f1f1">
+                <button class="loginbtn" type="submit">Reset Password</button>
+                <button type="button" onclick="document.getElementById('modalPasswd').style.display='none'" class="cancelbtn">Cancel</button>
+            </div>
+        </form>
+    </div>
+    {% if app.session.get('loggedInUser')  is null %}
+        <script>
+            modalPopup();
+        </script>
+    {% else %}
+        <script>
+            window.parent.location.reload(false);
+        </script>
+    {% endif %}
+
+    <h2 class="center">
+        Trophy Club Emergency Volunteers Association<br><br>
+        <img  src="/images/TCEVA-2023-logo.png" style="margin:auto;max-width: 250px;"/>
+    </h2>
+
+    <div class="clearfixxxx">
+        <div class="img-containerL">
+        </div>
+        <div class="img-containerR">
+      
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,279 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<script>
+	function moveMonth(month, year, direction){
+		month += direction;
+		if(month <=0){
+			year--;
+			month=12;
+		} else if(month > 12){
+			year++;
+			month = 1;
+		}
+		document.getElementById("newMonth").value = month;
+		document.getElementById("newYear").value = year;
+		document.getElementById("newDateForm").submit();
+	}
+	function edit(actionStr, year, month, day){
+		var action = JSON.parse(atob(actionStr));
+		var day = ("0" + day).slice(-2);
+		var month = ("0" + month).slice(-2);
+		var thisDay = year+"-"+month+"-"+day ;
+		document.getElementById("actionIdChoice").value = action.id;
+		if(action.actionDefinition > 0) 
+			document.getElementById("actionTypeChoice").disabled = true;
+		else
+			document.getElementById("actionTypeChoice").disabled = false;
+		document.getElementById("actionTypeChoice").value = action.actionDefinition;
+		changeAction(document.getElementById("actionTypeChoice"));
+		var data = "";
+		for(var p of action.persons){
+			if(p.id > 0){
+				var name = p.lastName + ", " + p.firstName;
+				name = name.replace("'","&quot;");
+				data += "<label class='long' >SignedUp</label><input type='hidden' id='joinId[]' name='joinId[]' value='"+p.id+"'><input name='joinName[]' type='text' readonly value='"+name+"'>";
+				data += "<button type='button' class='btn btn-info btn-xs' onclick='deletePerson("+p.id+")'>&#10006;</button> <--Hit button to remove<br>";
+			}
+		}
+		document.getElementById("signedup").innerHTML = data;
+		document.getElementById("dateChoice").value = thisDay;
+		document.getElementById("noteChoice").value = action.note;
+		modalPopup();
+	}
+	function deletePerson(pid){
+		var ids = document.getElementsByName("joinId[]");
+		var names = document.getElementsByName("joinName[]");
+		var len = ids.length;
+		var data = "";
+		for(var i=0; i<len; i++){
+			if(pid != ids[i].value){
+				var name = ids[i].value;
+				name = name.replace("'","&quot;");
+				data += "<label class='long' >SignedUp</label><input type='hidden' id='joinId[]' name='joinId[]' value='"+name+"'><input name='joinName[]' type='text' readonly value='"+names[i].value+"'>";
+				data += "<button type='button' class='btn btn-info btn-xs' onclick='deletePerson("+ids[i].value+")'>&#10006;</button> <--Hit button to remove<<br>";
+			}
+		}
+		document.getElementById("signedup").innerHTML = data;
+	}
+	function changeAction(act){
+		var sel=document.getElementById("volChoice");
+		
+		document.getElementById("actionTypeChoice").value = act.value;
+		var len = sel.options.length;
+		for(var i=0; i<len; i++){
+			sel.options[i].disabled = false;
+			if(act.value == 1 && sel.options[i].getAttribute("class") != 'cop')
+				sel.options[i].disabled = true;
+		}
+		
+	}
+	function addPerson(){
+		var e = document.getElementById("volChoice");    
+		var id = e.options[e.selectedIndex].value; 
+		// return on no name in select
+		if(id == 0) return;
+		// check for duplicate
+		var ids = document.getElementsByName("joinId[]");
+		var len = ids.length;
+		for(var i=0; i<len; i++){
+			if(id == ids[i].value) return;
+		}
+		var name = e.options[e.selectedIndex].text;
+		name = name.replace("'","&quot;");
+		var data = document.getElementById("signedup").innerHTML;
+		data += "<label class='long'>SignedUp</label><input type='hidden' id='joinId[]' name='joinId[]' value="+id+"><input name='joinName[]' type='text' readonly value='"+name+"'>";
+		data += "<button type='button' class='btn btn-info btn-xs' onclick='deletePerson("+id+")'>&#10006;</button> <--Hit button to remove<br>";
+		document.getElementById("signedup").innerHTML = data;
+	}
+</script>
+
+<div class="main">
+<form id="newDateForm" action="/action/edit" method="post">
+  <input type="hidden" id="newMonth" name="newMonth" />
+  <input type="hidden" id="newYear" name="newYear" />
+</form>
+<h3 style="color:black;background-color:LightCoral;">
+	{% for label, messages in app.flashes %}
+		{% for message in messages %}
+			<div class="flash-{{ label }}">
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endfor %}
+</h3>
+<div class="title">Volunteer Signups</div>
+<a class="instruction" href="/pages/signupInstructions.html">Instructions</a>
+<div style="clear: both;"></div>
+{% if loggedInUser.copAdmin == true %}
+   <a href="/action/definition/edit" target="workframe">Manage Signup Events</a>
+{% endif %}
+<div class='calendar-month'>
+	<a href="javascript:moveMonth({{month}}, {{year}}, -1)">&#10094;</a>
+	&nbsp;&nbsp;&nbsp;{{months[month-1]}}&nbsp;&nbsp;&nbsp;
+	<a href="javascript:moveMonth({{month}}, {{year}}, +1)">&#10095;</a>&nbsp;&nbsp;&nbsp;{{year}}</div>
+<table class="calendar">	
+	<thead>
+		<tr>
+			{% for day in days %}
+				<th>{{day}}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tr>
+		{# <c:forEach var="cnt" varStatus="loop" begin="0" end="40">
+			<c:set var="i" value="${loop.index-dow + 2}" />
+			<c:if test="${i <= 0}">
+				<td></td>
+			</c:if>
+			<c:if test="${i > 0 && i<=dim }">
+				<td><h4>${i}</h4>
+				   <c:if test='${loggedInUser.status == "M" || loggedInUser.status == "A"}'>
+					<a href="#" onclick="edit('${emptyAction.json}', ${year}, ${month+1}, ${i});">
+						&#9998;
+					</a>
+					</c:if>
+				
+					<c:forEach items="${actions}" var="action">
+						<c:if test="${i == action.day.date}">
+							<div class="ttbt">
+							  <c:choose>
+							  <c:when test='${loggedInUser.status == "M" || loggedInUser.status == "A"}'>
+							   <a data-toggle="modal" href="#addEditAction" onclick="edit('${action.json}', ${action.day.year+1900}, ${action.day.month+1}, '${action.day.date}');">${action.actionName += "(" += action.personSize += ")"}</a>
+							   <span class="tttt">${action.actionName}
+							   <c:forEach items="${action.persons }" var="p">
+							   <br>${people.lastName += ", " += p.firstName }
+							   </c:forEach>
+							   </span>
+							  </c:when>
+							  <c:otherwise>
+							  ${action.actionName += "(" += action.personSize += ")"}
+							  <span class="tttt">${action.actionName}
+							   <c:forEach items="${action.persons }" var="p">
+							   <br>${p.lastName += ", " += p.firstName }
+							   </c:forEach>
+							   </span>
+							  </c:otherwise>
+							  </c:choose>
+							 </div>
+						</c:if>
+					</c:forEach>
+				
+					</td>
+			</c:if>
+			<c:if test="${(i+dow)%7 == 1 }">
+				</tr><tr>
+		    </c:if>
+		</c:forEach> #}
+		{% for cnt in 0..40 %}
+			{% set i = cnt - dow +2 %}
+			
+			{% if i <= 0 %}
+				<td></td>
+			{% endif %}
+			
+			{% if i > 0 and i <= dim %}
+				<td>
+					<h4>{{ i }}</h4>
+					{% if loggedInUser.status == 'M' or loggedInUser.status == 'A' %}
+						<a href="#" onclick="edit('{{ emptyAction.json|escape('js') }}', {{ year }}, {{ month  }}, {{ i }});">
+							&#9998;
+						</a>
+					{% endif %}
+					{% for action in actions %}
+						{% if action != null and i == action.day|date('d') %}
+							<div class="ttbt">
+								{% if loggedInUser.status == 'M' or loggedInUser.status == 'A' %}
+									<a data-toggle="modal" href="#addEditAction" onclick="edit('{{ action.json|escape('js') }}', {{ action.day|date("Y")}}, {{ action.day|date("m") }}, {{ action.day|date("d") }});">
+										{{ action.actionName }} ({{ action.personSize }})
+									</a>
+									<span class="tttt">{{ action.actionName }}
+										{% for p in action.persons %}
+											<br>{{ p.lastName }}, {{ p.firstName }}
+										{% endfor %}
+									</span>
+								{% else %}
+									{{ action.actionName }} ({{ action.personSize }})
+									<span class="tttt">{{ action.actionName }}
+										{% for p in action.persons %}
+											<br>{{ p.lastName }}, {{ p.firstName }}
+										{% endfor %}
+									</span>
+								{% endif %}
+							</div>
+						{% endif %}
+					{% endfor %}
+				</td>
+			{% endif %}
+		
+			{% if (i + dow) % 7 == 1 %}
+				</tr><tr>
+			{% endif %}
+		{% endfor %}
+	
+
+	</tr>
+
+</table>
+<br><br><br><br>
+</div>
+</div>
+
+<!-- Edit/Add model pages -->
+	<div id="modalPopup" class="modal">
+		<form id="modalForm" class="modal-content animate" action="/action/edit" method="post">
+			<div class="container">
+				<input type="hidden" id="submitChoice" name='submitChoice' />
+				<input type="hidden" id="actionIdChoice" name='actionIdChoice' />
+				<span class="psw"></span><label for="actionTypeChoice">Action</label>
+				<select id="actionTypeChoice" name="actionTypeChoice" onchange="changeAction(this)">
+					<option value="0">Select an Action</option>
+					{% for actionDef in actionDefinitions %}
+					{# <c:forEach items="${actionDefinitions}" var="actionDef"> #}
+					<option value="{{actionDef.id}}">{{actionDef.name }}</option>
+					{% endfor %}
+					{# </c:forEach> #}
+				</select></span>
+				<div id="signedup" >
+						oldstuff
+				</div>
+
+				<br><span class="psw"></span><label for="volChoice">Sign Up:</label>
+				<select id="volChoice" name="volChoice">
+					<option value="0">Select a Member</option>
+					{% for person in people %}
+					{# <c:forEach items="${people }" var="person"> #}
+						{% set cop='' %}
+						{# <c:set var="cop" value=""/> #}
+						{# <c:if test='${person.hasFeature("COP")  == true}' >
+								<c:set var="cop" value="cop"/>
+						</c:if> #}
+						{% if person.hasFeature('COP') == true %}
+							{% set cop = 'cop' %}
+						{% endif %}
+				  	    <option class="{{cop}}" value="{{person.id}}" >{{person.lastName  ~ ', ' ~ person.firstName }}</option>
+					{# <option class="${cop}" value="${person.id }" >${person.lastName += ", " += person.firstName }</option> #}
+				  	{# </c:forEach> #}
+					{% endfor %}
+				</select>
+				<button type='button' onclick='addPerson()'>&#10133;</button> <-- Hit Button to Add<br>";
+				</span>
+				<br><span class="psw"><label for="dateChoice">Date:</label> 
+				<input type="date" id="dateChoice" name="dateChoice" required readonly></span>
+				<br><span class="psw"><label  for="noteChoice">Note/Time:</label> 
+				<input type="text" id="noteChoice" name="noteChoice" required ></span>
+			</div>
+			<div class="container" style="background-color: #f1f1f1">
+				<button onclick="setAction('Save');" type="button" class="savebtn">Save</button>
+				<button onclick="setAction('Delete');" type="button" class="deletebtn">Delete</button>
+				<button type="button" class="cancelbtn"
+					onclick="document.getElementById('modalPopup').style.display='none'">Cancel</button>
+			</div>
+
+		</form>
+	</div>
+			
+<script>
+//edit('${actions[0].json}', ${actions[0].day.year+1900}, ${actions[0].day.month+1}, '${actions[0].day.date}');
+
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<div class="main">
+<h2>Instructions on Time Reporting</h2>
+<p>
+	To Report a new Time Activity
+	<ul>
+		<li>Click on "Add New Time Entry".  A popup form will appear.</li>
+		<li>Unless you have Time Admin privileges, your name should already be populated.  Otherwise, select the person's name.</li>
+		<li>Select the Activity Type.</li>
+		<li>Select the Date the activity occurred</li>
+		<li>Enter the hours.  Round to the nearest quarter hour</li>
+		<li>(Suggested) Enter a note describing the event/duty</li>
+		<li>Hit "Save"</li>
+		<li>You should now see this item in the list</li>
+	</ul>
+</p>
+<p>
+	To Edit an existing Time Activity
+	<ul>
+		<li>Find the entry that needs editing in the list</li>
+		<li>Click Edit to the right of the item.  A popup form will appear.</li>
+		<li>Change the entry as needed</li>
+		<li>Hit "Save"</li>
+		<li>You should new see the updated item in the list</li>
+	</ul>
+</p>
+<p>
+	To Delete an existing Time Activity
+	<ul>
+		<li>Find the entry that needs editing in the list</li>
+		<li>Click Edit to the right of the item.  A popup form will appear.</li>
+		<li>Hit "Delete"</li>
+		<li>You should no longer see that item in the list.</li>
+	</ul>
+</p>
+</div>
+{% endblock %}

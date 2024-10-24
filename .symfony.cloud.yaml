@@ -1,0 +1,3 @@
+runtime:
+    web:
+        document_root: public_html
