@@ -35,7 +35,7 @@
 			{% if app.environment == 'prod' %}
 					
 			{% else %}
-				<H3 style="margin:auto; color:red;text-align:center">TEST SITE</div><br>
+				<H3 style="margin:auto; color:red;text-align:center">{{app.environment}} SITE</div><br>
 			{% endif %}
 		  
            {% block body %}		{% endblock %}
