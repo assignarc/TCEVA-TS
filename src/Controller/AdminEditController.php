@@ -128,7 +128,7 @@ class AdminEditController extends BaseController
                         $this->queryService->updatePersonAdmin($per);
                     }
                     $passwordStr = $this->getParm('passwdChoice');
-                    if ($passwordStr !== null && trim($passwordStr) !== '') {
+                    if (isset($passwordStr) && $passwordStr != null && trim($passwordStr) != '') {
                         $salt = password_hash($passwordStr, PASSWORD_BCRYPT);
                         $per->setPassword($salt);
                         $this->queryService->updatePersonAccess($per);

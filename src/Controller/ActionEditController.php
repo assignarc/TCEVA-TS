@@ -10,6 +10,7 @@ use App\Traits\LoggerAwareTrait;
 use App\Traits\DatabaseAwareTrait;
 use App\Services\CalendarViewService;
 use App\Exception\InvalidRequestException;
+use App\Traits\MailerAwareTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,7 +20,23 @@ class ActionEditController extends BaseController
 {
     use LoggerAwareTrait;
     use DatabaseAwareTrait;
+    use MailerAwareTrait;
     private $dateFormat = 'Y-m-d';
+
+    private $actionBody =    " <html><body> "
+                            . " <b><i>This email was auto-generated.</b></i><br>"
+                            . " <h4>DO NOT REPLY TO THIS EMAIL</h4><br>"
+                            . " This email is to confirm that you signed up for following,<br>"
+                            . " <br>"
+                            . " Action        :<b>%actionCommand%</b> <br>"
+                            . " Activity      :<b>%actionName%</b> <br>"
+                            . " Volunteer(s)  :<b>%actionVolunteers%</b> <br>"
+                            . " Datetime      :<b>%actionDateTime%</b> <br>"
+                            . " Note          :<b>%actionNaote%</b> <br>"
+                            . " <br> "
+                            . " Thank you! <br><br>"
+                            . " TCEVA. "
+                            . " </body></html>" ;
    
     #[Route('/edit', name: 'app_ActionEdit', methods: ['GET','POST'])]
     public function index(CalendarViewService $calendarView): Response
@@ -42,8 +59,17 @@ class ActionEditController extends BaseController
             if ($cmd) {
                 $actionIdChoice = $this->getParm('actionIdChoice');
                 $actionId = (int) $actionIdChoice;
+
+                $actionDefId = (int) $this->getParm('actionTypeChoice');
+                $actionDefinitions = $this->queryService->getActionDefinitions();
+                $usedAd = $this->findActionDefinitionById($actionDefId, $actionDefinitions);
+
+
                 if ($cmd == 'Delete') {
+                    $action = $this->queryService->getAction($actionId);
+                    $usedAd = $this->findActionDefinitionById($action->getActionDefinition(), $actionDefinitions);
                     $this->queryService->deleteAction($actionId);
+                    $this->emailActionOperation("Signup removed", $action, $usedAd);
                 } else {
                     $noteStr = $this->getParm('noteChoice',"N/A");
                     if (empty($noteStr)) {
@@ -65,14 +91,9 @@ class ActionEditController extends BaseController
                             }
                         }
                     }
-                    // else{
-                    //     throw new InvalidRequestException("Join Volunteer ids are notprovided");
-                    // }
 
                     if ($action->getId() < 0) {
-                        $actionDefId = (int) $this->getParm('actionTypeChoice');
-                        $actionDefinitions = $this->queryService->getActionDefinitions();
-                        $usedAd = $this->findActionDefinitionById($actionDefId, $actionDefinitions);
+                     
                         
                         if ($usedAd ==null) {
                             throw new InvalidRequestException("Invalid Action Type");
@@ -91,8 +112,16 @@ class ActionEditController extends BaseController
                         $action->setActionDefinition($usedAd->getId());
                         $action->setDay($day);
                         $this->queryService->insertAction($action);
+                        
+                        $this->emailActionOperation("Signup added", $action, $usedAd);
+                      
+
+
                     } else if ($cmd === 'Save') {
                         $this->queryService->updateAction($action);
+                        $action = $this->queryService->getAction($action->getId());
+                        $usedAd = $this->findActionDefinitionById($action->getActionDefinition(), $actionDefinitions);
+                        $this->emailActionOperation("Signup updated", $action, $usedAd);
                     }
                 }
             }
@@ -134,6 +163,25 @@ class ActionEditController extends BaseController
             'dow' => $calendar['dow'],
         ]);
     }
+
+    private function emailActionOperation(string $actionCommand, Action $action, ActionDefinition $usedAd){
+          // Insert Action Email setup
+          $signedUpName = "";
+          foreach($action->getPersons() as $a_person){
+              $signedUpName = $signedUpName. $a_person->getLastName() . ", " .  $a_person->getFirstName() ."; ";
+          }
+          $body = str_replace("%actionCommand%", $actionCommand, $this->actionBody);
+          $body = str_replace("%actionName%", $usedAd->getName(), $body);
+          $body = str_replace("%actionVolunteers%", $signedUpName,$body);
+          $body = str_replace("%actionDateTime%", $action->getDay()->format('Y-m-d'), $body);
+          $body = str_replace("%actionNaote%", $action->getNote(), $body);
+
+          foreach($action->getPersons() as $a_person){
+              if($a_person->getEmail()!=null && $a_person->getEmail()!='')
+                  $this->sendEmail($a_person->getEmail(), "TCEVA Action Signup", $body);
+          }
+    }
+
 
     private function findActionDefinitionById(int $actionDefId, array $actionDefinitions): ?ActionDefinition
     {

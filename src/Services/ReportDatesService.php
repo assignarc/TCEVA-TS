@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Traits\LoggerAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 
-class ReportDates 
+class ReportDatesService
 {
     use LoggerAwareTrait;
 

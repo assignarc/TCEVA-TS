@@ -1,9 +1,10 @@
 <?php
 namespace App\Controller;
 
-use App\Services\ReportDates;
+use App\Services\ReportDatesService;
 use App\Traits\DatabaseAwareTrait;
 use App\Traits\LoggerAwareTrait;
+use App\Traits\MailerAwareTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -11,11 +12,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class ReportController extends BaseController
 {
     use DatabaseAwareTrait;
-    use LoggerAwareTrait;
+    use MailerAwareTrait;
+
     #[Route('/selector', name: 'app_ReportPage', methods: ['GET','POST'])]
     public function index(): Response
     {
         $loggedInUser = $this->getSessionParm('loggedInUser');
+       // $this->sendEmail("In Report Page");
         if (!$loggedInUser) {
             return $this->redirectToRoute("app_loginPage"); // Assuming you have a login route
         }
@@ -27,7 +30,7 @@ class ReportController extends BaseController
    
 
     #[Route('/show', name: 'app_ReportDisplay', methods: ['GET','POST'])]
-    public function show(ReportDates $reportDates): Response
+    public function show(ReportDatesService $reportDates): Response
     {
         
             $valid = true;

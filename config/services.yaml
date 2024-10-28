@@ -29,4 +29,6 @@ services:
             $DB_PASSWRD: '%env(DB_PASSWRD)%'
             $DB_HOST_NAME: '%env(DB_HOST_NAME)%'
             $DB_PORT: '%env(DB_PORT)%'
+    App\Traits\MailerAwareTrait:
+        
             

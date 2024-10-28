@@ -28,7 +28,7 @@ class QueryService {
         //$this->dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->dateFormat = 'm/d/Y';  // Equivalent of SimpleDateFormat in Java
     }
-	public function getPersons($id) {
+	public function getPersons($id) : ?array {
 		$list = [];
 		$personStmt = "
 			SELECT id, firstName, lastName, login, password, newsAdmin, userAdmin, timeAdmin, copAdmin, 
@@ -748,7 +748,7 @@ class QueryService {
 				$actionDef->setDescription($row['description']);
 				$actionDef->setRestrictionType($row['restrictionType']);
 				$actionDef->setRestrictionValue($row['restrictionValue']);
-				$actionDef->setRestrictionDate(new DateTime($row['restrictionDate']));
+				$actionDef->setRestrictionDate($row['restrictionDate'] ? new DateTime($row['restrictionDate']) : new DateTime('0000-01-01') );
 				$list[] = $actionDef;  // Add action definition to the list
 			}
 		} catch (PDOException $e) {
@@ -861,6 +861,59 @@ class QueryService {
 		}
 	
 		return $list;
+	}
+	public function getAction($actionId) : ?Action {
+		$list = [];
+		$actionStmt = "
+						SELECT action.id, action.actionDefId, actionDefinition.name, day, note, 
+							action_person.personId, person.lastName, person.firstName, person.email
+						FROM action , actionDefinition , person, action_person
+						where action.id = action_person.actionId AND action_person.personId = person.id and action.actionDefId = actionDefinition.id
+						and action.id = :id";
+	
+		try {
+			$this->logInfo($actionId);
+		
+			$stmt = $this->dbConnection->prepare($actionStmt);
+			$stmt->bindValue(':id', $actionId, PDO::PARAM_STR);  // Assuming date is passed as a string
+		
+			$stmt->execute();
+	
+			$lastAction = -1;
+			$action = new Action();
+			$persons=[];
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				$currentAction = $row['id'];
+				if ($lastAction != $currentAction) {
+					if ($lastAction != -1) {
+						$action->setPersons($persons);
+						$persons=[];
+						$list[] = $action;
+					}
+					$action = new Action();
+					$action->setId($row['id']);
+					$action->setActionDefinition($row['actionDefId']);
+					$action->setActionName($row['name']);
+					$action->setDay(new DateTime($row['day']));
+					$action->setNote($row['note']);
+					$action->setPersons([]);
+					$lastAction = $currentAction;
+				}
+				$person = new Person();
+				$person->setLastName($row['lastName']);
+				$person->setFirstName($row['firstName']);	
+				$person->setEmail($row['email']);	
+				$person->setId($row['personId']);
+				$persons[] = $person;
+			}
+			$action->setPersons($persons);
+			$list[] = $action;
+			
+		} catch (PDOException $e) {
+			throw new DatabaseException("DBError:" . __METHOD__ . " Message:" . $e->getMessage() ,previous:$e);
+		}
+	
+		return $list[0];
 	}
 	public function updateAction(Action $action) {
 		$updateActionStmt = "

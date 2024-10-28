@@ -88,7 +88,7 @@ class Action extends BaseBean{
         $this->persons[] = $person;
     }
 
-    public function getPersons() {
+    public function getPersons(): ?array {
         return $this->persons;
     }
 
