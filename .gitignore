@@ -1,3 +1,4 @@
 # Ignore logs folder
 var/
 vendor/
+*.env.*
