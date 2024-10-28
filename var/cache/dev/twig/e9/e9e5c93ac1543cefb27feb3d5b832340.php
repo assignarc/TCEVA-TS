@@ -84,10 +84,7 @@ class __TwigTemplate_2417b895e9f098b3ba64fff2402100e1 extends Template
 \t\t
 \t\t\t</div>
 \t\t\t<div class=\"img-containerR\">
-\t\t\t\t<!-- <a href=\"https://www.americantrucks.com/positive-payload.html\" target=\"_blank\">
-\t\t\t
-\t\t\t\t\t<img  src=\"../images/at_positive-payload_desktop.jpg\" style=\"width:100%;\"/>
-\t\t\t\t</a> -->
+\t\t\t\t
 \t\t\t</div>
 \t\t</div>
 \t</div>
@@ -140,13 +137,10 @@ class __TwigTemplate_2417b895e9f098b3ba64fff2402100e1 extends Template
 \t\t
 \t\t\t</div>
 \t\t\t<div class=\"img-containerR\">
-\t\t\t\t<!-- <a href=\"https://www.americantrucks.com/positive-payload.html\" target=\"_blank\">
-\t\t\t
-\t\t\t\t\t<img  src=\"../images/at_positive-payload_desktop.jpg\" style=\"width:100%;\"/>
-\t\t\t\t</a> -->
+\t\t\t\t
 \t\t\t</div>
 \t\t</div>
 \t</div>
-{% endblock %}", "home.html.twig", "/Users/vishalkhapre/Documents/Code/TransPortlets/tceta-ts/templates/home.html.twig");
+{% endblock %}", "home.html.twig", "/Users/vishalkhapre/Documents/Code/TCEVA/TCEVA-TS/templates/home.html.twig");
     }
 }

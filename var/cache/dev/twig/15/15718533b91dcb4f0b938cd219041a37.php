@@ -123,6 +123,6 @@ class __TwigTemplate_0f53421bcb24b05a4647545c8018546a extends Template
 <script>
 \twindow.parent.location.reload(false);
 </script>
-{% endblock %}", "logout.html.twig", "/Users/vishalkhapre/Documents/Code/TransPortlets/tceta-ts/templates/logout.html.twig");
+{% endblock %}", "logout.html.twig", "/Users/vishalkhapre/Documents/Code/TCEVA/TCEVA-TS/templates/logout.html.twig");
     }
 }

@@ -179,10 +179,7 @@ class __TwigTemplate_b6737458159f34de10c81226eccf1675 extends Template
         <div class=\"img-containerL\">
         </div>
         <div class=\"img-containerR\">
-            <!-- <a href=\"https://www.americantrucks.com/positive-payload.html\" target=\"_blank\">
-        
-                <img  src=\"../images/at_positive-payload_desktop.jpg\" style=\"width:100%;\"/>
-            </a> -->
+      
         </div>
     </div>
 ";
@@ -298,12 +295,9 @@ class __TwigTemplate_b6737458159f34de10c81226eccf1675 extends Template
         <div class=\"img-containerL\">
         </div>
         <div class=\"img-containerR\">
-            <!-- <a href=\"https://www.americantrucks.com/positive-payload.html\" target=\"_blank\">
-        
-                <img  src=\"../images/at_positive-payload_desktop.jpg\" style=\"width:100%;\"/>
-            </a> -->
+      
         </div>
     </div>
-{% endblock %}", "login.html.twig", "/Users/vishalkhapre/Documents/Code/TransPortlets/tceta-ts/templates/login.html.twig");
+{% endblock %}", "login.html.twig", "/Users/vishalkhapre/Documents/Code/TCEVA/TCEVA-TS/templates/login.html.twig");
     }
 }

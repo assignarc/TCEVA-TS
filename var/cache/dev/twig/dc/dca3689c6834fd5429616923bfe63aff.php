@@ -119,6 +119,6 @@ class __TwigTemplate_1b7c29480c202cbacb3267e0e8d90d16 extends Template
 \t<div style=\"overflow-x: auto;\">
 \t\t<img class=\"center\" src=\"/images/TCEVA-2023-logo.png\" style=\"width:300px;height:424px;\"/>
 \t</div>
-{% endblock %}", "pages/blank.html.twig", "/Users/vishalkhapre/Documents/Code/TransPortlets/tceta-ts/templates/pages/blank.html.twig");
+{% endblock %}", "pages/blank.html.twig", "/Users/vishalkhapre/Documents/Code/TCEVA/TCEVA-TS/templates/pages/blank.html.twig");
     }
 }

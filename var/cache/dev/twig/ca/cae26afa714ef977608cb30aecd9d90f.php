@@ -113,7 +113,9 @@ class __TwigTemplate_011f1ca914078b33f814bb4a8eec4b50 extends Template
 \t\t\t";
         } else {
             // line 38
-            yield "\t\t\t\t<H3 style=\"margin:auto; color:red;text-align:center\">TEST SITE</div><br>
+            yield "\t\t\t\t<H3 style=\"margin:auto; color:red;text-align:center\">";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 38, $this->source); })()), "environment", [], "any", false, false, false, 38), "html", null, true);
+            yield " environment</div><br>
 \t\t\t";
         }
         // line 40
@@ -137,10 +139,43 @@ class __TwigTemplate_011f1ca914078b33f814bb4a8eec4b50 extends Template
                     }
                 }
 \t\t</script>
+\t\t<div class=\"container\">
+                ";
+        // line 58
+        $context['_parent'] = $context;
+        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 58, $this->source); })()), "flashes", [], "any", false, false, false, 58));
+        foreach ($context['_seq'] as $context["label"] => $context["messages"]) {
+            // line 59
+            yield "                    ";
+            $context['_parent'] = $context;
+            $context['_seq'] = CoreExtension::ensureTraversable($context["messages"]);
+            foreach ($context['_seq'] as $context["_key"] => $context["message"]) {
+                // line 60
+                yield "                        <div class=\"flash-";
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["label"], "html", null, true);
+                yield "\">
+                            ";
+                // line 61
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["message"], "html", null, true);
+                yield "
+                        </div>
+                    ";
+            }
+            $_parent = $context['_parent'];
+            unset($context['_seq'], $context['_key'], $context['message'], $context['_parent']);
+            $context = array_intersect_key($context, $_parent) + $_parent;
+            // line 64
+            yield "                ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['label'], $context['messages'], $context['_parent']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 65
+        yield "            </div>
 \t\t<div class=\"bottom\">
 \t\t\t©Trophy Club Emergency Volunteers Association
 \t\t</div>
-\t\t</body>
+\t</body>
 </html>
 ";
         
@@ -221,7 +256,7 @@ class __TwigTemplate_011f1ca914078b33f814bb4a8eec4b50 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  181 => 41,  169 => 6,  156 => 5,  125 => 42,  123 => 41,  120 => 40,  116 => 38,  112 => 36,  110 => 35,  103 => 30,  99 => 28,  94 => 26,  89 => 24,  85 => 23,  81 => 22,  76 => 21,  73 => 20,  71 => 19,  58 => 8,  56 => 5,  50 => 1,);
+        return array (  216 => 41,  204 => 6,  191 => 5,  174 => 65,  168 => 64,  159 => 61,  154 => 60,  149 => 59,  145 => 58,  127 => 42,  125 => 41,  122 => 40,  116 => 38,  112 => 36,  110 => 35,  103 => 30,  99 => 28,  94 => 26,  89 => 24,  85 => 23,  81 => 22,  76 => 21,  73 => 20,  71 => 19,  58 => 8,  56 => 5,  50 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -263,7 +298,7 @@ class __TwigTemplate_011f1ca914078b33f814bb4a8eec4b50 extends Template
 \t\t\t{% if app.environment == 'prod' %}
 \t\t\t\t\t
 \t\t\t{% else %}
-\t\t\t\t<H3 style=\"margin:auto; color:red;text-align:center\">TEST SITE</div><br>
+\t\t\t\t<H3 style=\"margin:auto; color:red;text-align:center\">{{app.environment}} environment</div><br>
 \t\t\t{% endif %}
 \t\t  
            {% block body %}\t\t{% endblock %}
@@ -282,11 +317,20 @@ class __TwigTemplate_011f1ca914078b33f814bb4a8eec4b50 extends Template
                     }
                 }
 \t\t</script>
+\t\t<div class=\"container\">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class=\"flash-{{ label }}\">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
 \t\t<div class=\"bottom\">
 \t\t\t©Trophy Club Emergency Volunteers Association
 \t\t</div>
-\t\t</body>
+\t</body>
 </html>
-", "base.html.twig", "/Users/vishalkhapre/Documents/Code/TransPortlets/tceta-ts/templates/base.html.twig");
+", "base.html.twig", "/Users/vishalkhapre/Documents/Code/TCEVA/TCEVA-TS/templates/base.html.twig");
     }
 }

@@ -219,6 +219,6 @@ class __TwigTemplate_501b69684fac85bad606afe94e6497c4 extends Template
 \t\t</table>
 
 \t</div>
-{% endblock %}", "pages/noSolicitation.html.twig", "/Users/vishalkhapre/Documents/Code/TransPortlets/tceta-ts/templates/pages/noSolicitation.html.twig");
+{% endblock %}", "pages/noSolicitation.html.twig", "/Users/vishalkhapre/Documents/Code/TCEVA/TCEVA-TS/templates/pages/noSolicitation.html.twig");
     }
 }

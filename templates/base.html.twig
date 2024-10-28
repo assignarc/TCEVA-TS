@@ -35,7 +35,7 @@
 			{% if app.environment == 'prod' %}
 					
 			{% else %}
-				<H3 style="margin:auto; color:red;text-align:center">{{app.environment}} SITE</div><br>
+				<H3 style="margin:auto; color:red;text-align:center">{{app.environment}} environment</div><br>
 			{% endif %}
 		  
            {% block body %}		{% endblock %}
@@ -54,6 +54,15 @@
                     }
                 }
 		</script>
+		<div class="container">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="flash-{{ label }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
 		<div class="bottom">
 			©Trophy Club Emergency Volunteers Association
 		</div>

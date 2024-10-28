@@ -1752,6 +1752,6 @@ $context["log"], "type", [], "any", false, false, false, 459))) ? ("silenced") :
         {% endif %}
     </div>
 {% endmacro %}
-", "@WebProfiler/Collector/logger.html.twig", "/Users/vishalkhapre/Documents/Code/TransPortlets/tceta-ts/vendor/symfony/web-profiler-bundle/Resources/views/Collector/logger.html.twig");
+", "@WebProfiler/Collector/logger.html.twig", "/Users/vishalkhapre/Documents/Code/TCEVA/TCEVA-TS/vendor/symfony/web-profiler-bundle/Resources/views/Collector/logger.html.twig");
     }
 }
