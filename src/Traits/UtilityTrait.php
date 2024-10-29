@@ -8,7 +8,7 @@ use Psr\Log\LoggerTrait;
 
 trait UtilityTrait {
 
-    const DATE_FORMAT = 'Y-m-d';
+    const DATE_FORMAT = \App\Entity\Constants::DATE_FORMAT;
     
     public static function ConvertStringToDate(string $string): DateTime{
         return new DateTime($string);

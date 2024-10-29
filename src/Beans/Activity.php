@@ -1,6 +1,7 @@
 <?php
 namespace App\Beans;
 
+use App\Entity\Constants;
 use App\Exception\InvalidRequestException;
 use DateTime;
 use Exception;
@@ -17,7 +18,7 @@ class Activity  extends BaseBean{
     private $hours;
     private $note;
 
-    private $dateFormat = "Y-m-d";  // Date format
+    private $dateFormat = Constants::DATE_FORMAT;
     private $json;
 
     public function getJson() {

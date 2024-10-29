@@ -1,6 +1,7 @@
 <?php
 namespace App\Beans;
 
+use App\Entity\Constants;
 use DateTime;
 
 class Person extends BaseBean{
@@ -64,7 +65,7 @@ class Person extends BaseBean{
                 $f = [
                     'id' => $value->getId(),
                     'featureId' => $value->getFeatureId(),
-                    'featureDate' => $value->getFeatureDate()->format('Y-m-d'),
+                    'featureDate' => $value->getFeatureDate()->format(Constants::DATE_FORMAT),
                     'featureName'=> $value->getFeatureName(),
                     'featureLabel' => $value->getFeatureLabel()
                 ];

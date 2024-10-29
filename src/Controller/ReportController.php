@@ -154,7 +154,9 @@ class ReportController extends BaseController
                             $start = $reportDates->getStartDate();
                             $end = $reportDates->getEndDate();
                             $actionDefinitions = $this->queryService->getActionDefinitions();
-                            $actions = $this->queryService->getActions($start->format('Y-m-d'), $end->format('Y-m-d'));
+                            $actions = $this->queryService->getActions(
+                                $start->format(\App\Entity\Constants::DATE_FORMAT), 
+                                $end->format(\App\Entity\Constants::DATE_FORMAT));
     
                             return $this->render('reportVolunteer.html.twig', [
                                 'actionDefinitions' => $actionDefinitions,

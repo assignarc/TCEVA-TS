@@ -28,8 +28,7 @@ class CalendarViewService
         
         $now->setDate($this->year, $this->month, 1);  // Adjust month for PHP (1-12)
 
-        // $this->logAlert(" Month1 : ". $request->get('newMonth') . " Year: " . $request->get('newYear'));
-        // Check for user input (from request)
+         // Check for user input (from request)
         $monthStr = $request->get('newMonth');
         if ($monthStr !== null) {
             $this->month = (int)$monthStr;
@@ -38,21 +37,14 @@ class CalendarViewService
                 $this->year = (int)$yearStr;
             }
             $now->setDate($this->year, $this->month, 1);
-            // $this->logAlert($now->format('Y-m-d'));
+           
         }
        
         // Calculate the number of days in the month
-        // $this->logAlert(" Month : ". $this->month . " Year: " . $this->year);
-       
-        // $this->logAlert("Days in month ". cal_days_in_month(CAL_GREGORIAN, $this->month, $this->year) . " Month : ". $this->month . " Year: " . $this->year);
-       
+         
         $this->daysInMonth = cal_days_in_month(CAL_GREGORIAN, $this->month, $this->year); //$this->calculateDaysInMonth($this->month, $this->year);
         
-        // Calculate the day of the week for the first day of the month
-        // $this->logAlert("Day:".$now->format("Y-m-d"));
-       
         //Adjust for phptojavascript.
-       
         if((int)$now->format('w')-1 < 0 ) 
             $dow = 6;
         else 

@@ -198,7 +198,7 @@ class QueryService {
 			$stmt->bindValue(':birthDay', $person->getBirthDay(), PDO::PARAM_INT);
 			$stmt->bindValue(':emergencyContactName', $person->getEmergencyContact(), PDO::PARAM_STR);
 			$stmt->bindValue(':emergencyContactPhone', $person->getEmergencyContactPhone(), PDO::PARAM_STR);
-			$stmt->bindValue(':joinDate', $person->getJoinDate()->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date is passed as a string
+			$stmt->bindValue(':joinDate', $person->getJoinDate()->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
 			$stmt->bindValue(':renewYear', $person->getRenewYear(), PDO::PARAM_INT);
 			$stmt->bindValue(':status', $person->getStatus(), PDO::PARAM_STR);
 			$stmt->bindValue(':id', $person->getId(), PDO::PARAM_INT);
@@ -259,7 +259,7 @@ class QueryService {
 			$stmt = $this->dbConnection->prepare($updateStmt);
 	
 			// Binding parameters
-			$stmt->bindValue(':joinDate', $person->getJoinDate()->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date is passed as a string
+			$stmt->bindValue(':joinDate', $person->getJoinDate()->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
 			$stmt->bindValue(':renewYear', $person->getRenewYear(), PDO::PARAM_INT);
 			$stmt->bindValue(':newsAdmin', $person->isNewsAdmin(), PDO::PARAM_BOOL);
 			$stmt->bindValue(':userAdmin', $person->isUserAdmin(), PDO::PARAM_BOOL);
@@ -319,7 +319,7 @@ class QueryService {
 			$stmt->bindValue(':birthDay', $person->getBirthDay(), PDO::PARAM_INT);
 			$stmt->bindValue(':emergencyContactName', $person->getEmergencyContact(), PDO::PARAM_STR);
 			$stmt->bindValue(':emergencyContactPhone', $person->getEmergencyContactPhone(), PDO::PARAM_STR);
-			$stmt->bindValue(':joinDate', $person->getJoinDate()->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date is passed as a string
+			$stmt->bindValue(':joinDate', $person->getJoinDate()->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
 			$stmt->bindValue(':renewYear', $person->getRenewYear(), PDO::PARAM_INT);
 			$stmt->bindValue(':status', $person->getStatus(), PDO::PARAM_STR);
 	
@@ -402,7 +402,7 @@ class QueryService {
 	
 		try {
 			$stmt = $this->dbConnection->prepare($activityStmt);
-			$stmt->bindValue(':since', $since->format('Y-m-d'), PDO::PARAM_STR);  // Assuming $since is a date in string format
+			$stmt->bindValue(':since', $since->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming $since is a date in string format
 			$stmt->bindValue(':personId', $personId, PDO::PARAM_INT);
 			$stmt->execute();
 	
@@ -439,8 +439,8 @@ class QueryService {
 	
 		try {
 			$stmt = $this->dbConnection->prepare($activityStmt);
-			$stmt->bindValue(':start', $start->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date passed as a string
-			$stmt->bindValue(':end', $end->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date passed as a string
+			$stmt->bindValue(':start', $start->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date passed as a string
+			$stmt->bindValue(':end', $end->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date passed as a string
 			$stmt->execute();
 	
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -470,8 +470,8 @@ class QueryService {
 		try {
 			$stmt = $this->dbConnection->prepare($activityStmt);
 			$stmt->bindValue(':person', $person, PDO::PARAM_INT);
-			$stmt->bindValue(':start', $start->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date is passed as a string
-			$stmt->bindValue(':end', $end->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date is passed as a string
+			$stmt->bindValue(':start', $start->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
+			$stmt->bindValue(':end', $end->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
 			$stmt->execute();
 	
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -496,7 +496,7 @@ class QueryService {
 	
 		try {
 			$stmt = $this->dbConnection->prepare($activityStmt);
-			$stmt->bindValue(':from', $from->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date is passed as a string
+			$stmt->bindValue(':from', $from->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
 			$stmt->execute();
 	
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -635,7 +635,7 @@ class QueryService {
 			// Binding parameters
 			$stmt->bindValue(':personId', $activity->getPersonId(), PDO::PARAM_INT);
 			$stmt->bindValue(':activityTypeId', $activity->getActivityId(), PDO::PARAM_INT);
-			$stmt->bindValue(':day', $activity->getDay()->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date is passed as a string
+			$stmt->bindValue(':day', $activity->getDay()->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
 			$stmt->bindValue(':hours', $activity->getHours(), PDO::PARAM_STR);
 			$stmt->bindValue(':note', $activity->getNote(), PDO::PARAM_STR);
 	
@@ -657,7 +657,7 @@ class QueryService {
 			// Binding parameters
 			$stmt->bindValue(':personId', $activity->getPersonId(), PDO::PARAM_INT);
 			$stmt->bindValue(':activityTypeId', $activity->getActivityId(), PDO::PARAM_INT);
-			$stmt->bindValue(':day', $activity->getDay()->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date is passed as a string
+			$stmt->bindValue(':day', $activity->getDay()->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
 			$stmt->bindValue(':hours', $activity->getHours(), PDO::PARAM_STR);
 			$stmt->bindValue(':note', $activity->getNote(), PDO::PARAM_STR);
 			$stmt->bindValue(':id', $activity->getId(), PDO::PARAM_INT);
@@ -796,7 +796,7 @@ class QueryService {
 			$stmt->bindValue(':restrictionType', $actionDefinition->getRestrictionType(), PDO::PARAM_INT);
 			$stmt->bindValue(':restrictionValue', $actionDefinition->getRestrictionValue(), PDO::PARAM_STR);
 			if($actionDefinition->getRestrictionDate())
-				$stmt->bindValue(':restrictionDate', $actionDefinition->getRestrictionDate()->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date is passed as a string
+				$stmt->bindValue(':restrictionDate', $actionDefinition->getRestrictionDate()->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
 			else 
 				$stmt->bindValue(':restrictionDate', null, PDO::PARAM_STR); 
 			$stmt->bindValue(':id', $actionDefinition->getId(), PDO::PARAM_INT);
@@ -972,7 +972,7 @@ class QueryService {
 			$stmt1 = $this->dbConnection->prepare($insertActionStmt);
 			//Insert action
 			$stmt1->bindValue(':actionDefId', intval($action->getActionDefinition()), PDO::PARAM_INT);
-			$stmt1->bindValue(':day', $action->getDay()->format('Y-m-d'), PDO::PARAM_STR);  // Assuming date is passed as a string
+			$stmt1->bindValue(':day', $action->getDay()->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
 			$stmt1->bindValue(':note', $action->getNote(), PDO::PARAM_STR);
 			$stmt1->execute();
 

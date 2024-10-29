@@ -12,7 +12,7 @@ class Event  extends BaseBean{
     private $day;  // Using DateTime for handling date
     private $url;
 
-    private $dateFormat = "Y-m-d";  // Date format
+    private $dateFormat = \App\Entity\Constants::DATE_FORMAT;
     private $json;
 
     public function getJson() {

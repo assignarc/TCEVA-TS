@@ -1,6 +1,7 @@
 <?php
 namespace App\Beans;
 
+use App\Entity\Constants;
 use DateTime;
 use Exception;
 
@@ -14,7 +15,7 @@ class Patrol extends BaseBean{
     private $person1Name;
     private $person2Name;
 
-    private $dateFormat = "Y-m-d";  // Date format
+    private $dateFormat = Constants::DATE_FORMAT;
     private $json;
 
     public function getJson() {

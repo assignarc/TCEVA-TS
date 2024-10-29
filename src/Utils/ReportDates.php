@@ -26,8 +26,8 @@ class ReportDates {
 
         // Return the start and end dates formatted as needed for the report
         return [
-            'startDate' => $this->startC->format('Y-m-d'),
-            'endDate' => $this->endC->format('Y-m-d')
+            'startDate' => $this->startC->format(\App\Entity\Constants::DATE_FORMAT),
+            'endDate' => $this->endC->format(\App\Entity\Constants::DATE_FORMAT)
         ];
     }
 }

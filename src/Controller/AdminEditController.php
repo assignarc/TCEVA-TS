@@ -86,7 +86,12 @@ class AdminEditController extends BaseController
 
                 $jDateStr = $this->getParm('joinDateChoice');
                 if ($jDateStr !== null && trim($jDateStr) !== '') {
-                    $ud = DateTime::createFromFormat('Y-m-d', $jDateStr, new DateTimeZone('UTC'));
+
+                    $ud = DateTime::createFromFormat(
+                        \App\Entity\Constants::DATE_FORMAT, 
+                        $jDateStr, 
+                        new DateTimeZone('UTC'));
+
                     if ($ud !== false) {
                         $per->setJoinDate($ud);
                     }
@@ -113,7 +118,11 @@ class AdminEditController extends BaseController
 
                         $fd = $this->getParm("Feature_" . $ft . "_dateChoice");
                         if ($fd !== null && trim($fd) !== '') {
-                            $ud = DateTime::createFromFormat('Y-m-d', $fd, new DateTimeZone('UTC'));
+                            $ud = DateTime::createFromFormat(
+                                \App\Entity\Constants::DATE_FORMAT, 
+                                $fd, 
+                                new DateTimeZone('UTC'));
+                                
                             if ($ud !== false) {
                                 $pf->setFeatureDate($ud);
                             }

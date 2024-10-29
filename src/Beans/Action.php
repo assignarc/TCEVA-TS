@@ -1,5 +1,7 @@
 <?php
 namespace App\Beans;
+
+use App\Entity\Constants;
 use DateTime;
 use Exception;
 
@@ -11,7 +13,7 @@ class Action extends BaseBean{
     private $note;
     private $persons = [];
     private $personSize;
-    private $dateFormat = "Y-m-d";
+    private $dateFormat = Constants::DATE_FORMAT;
     private $json;
 
     public function __construct() {

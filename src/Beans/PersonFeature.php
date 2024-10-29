@@ -54,7 +54,7 @@ class PersonFeature {
             "id=" . $this->id .
             ", featureId=" . $this->featureId .
             ", featureName='" . $this->featureName . '\'' .
-            ", featureDate=" . $this->featureDate->format('Y-m-d') . // Format the date
+            ", featureDate=" . $this->featureDate->format(\App\Entity\Constants::DATE_FORMAT) . // Format the date
             ", featureLabel='" . $this->featureLabel . '\'' .
             '}';
     }

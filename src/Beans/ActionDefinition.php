@@ -13,7 +13,7 @@ class ActionDefinition  extends BaseBean{
     private $restrictionValue;
     private $restrictionDate;
 
-    private $dateFormat = "Y-m-d";  // Date format
+    private $dateFormat = \App\Entity\Constants::DATE_FORMAT;
     private $json;
 
     const RESTRICTION_NONE = 0;

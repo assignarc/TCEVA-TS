@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Beans\Action;
 use App\Beans\ActionDefinition;
+use App\Entity\Constants;
 use App\Exception\InvalidRequestException;
 use App\Services\CalendarViewService;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,7 @@ class ActionDefinitionEditController extends BaseController
     use LoggerAwareTrait;
     use DatabaseAwareTrait;
 
-    private $dateFormat = 'Y-m-d';
+    
 
     #[Route('/edit', name: 'app_ActionDefinitionEdit', methods: ['GET','POST'])]
     public function index(CalendarViewService $calendarView): Response
@@ -52,7 +53,7 @@ class ActionDefinitionEditController extends BaseController
                     if (empty($restrictionDate)) {
                         throw new InvalidRequestException("Missing Date Value");
                     }
-                    $ud = \DateTime::createFromFormat('Y-m-d', $restrictionDate);
+                    $ud = \DateTime::createFromFormat(Constants::DATE_FORMAT, $restrictionDate);
                     if (!$ud) {
                         throw new InvalidRequestException("Invalid Date Value");
                     }

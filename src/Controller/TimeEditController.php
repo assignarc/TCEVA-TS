@@ -72,7 +72,7 @@ class TimeEditController extends BaseController
                     if (empty($dayStr)) {
                         throw new \RuntimeException('Missing Date Value');
                     }
-                    $date = \DateTime::createFromFormat('Y-m-d', $dayStr);
+                    $date = \DateTime::createFromFormat(\App\Entity\Constants::DATE_FORMAT, $dayStr);
                     if ($date === false) {
                         throw new \RuntimeException('Invalid Date Value');
                     }
