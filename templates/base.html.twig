@@ -3,7 +3,7 @@
 		<meta name="viewport" content="initial-scale=1, viewport-fit=cover">
 		<title>
             {% block title %}
-                Trophy Club Emergency Volunteer Association
+                Trophy Club Emergency Volunteers Association
             {% endblock %}
         </title>
 		<link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -25,7 +25,7 @@
 				<a href="/logout">Logout</a>
 				<a style="float:right;" href="#">{{loggedInUser.lastName ~ ', ' ~ loggedInUser.firstname}}</a>
     		{% else %}
-                <a href="/login/page" >Login</a>
+                <a href="/login/page?reload={{date()| date('U') * 1000 }}" >Login</a>
             {% endif %}
 			
 			
