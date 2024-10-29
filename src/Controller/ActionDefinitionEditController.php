@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-use App\Beans\Action;
 use App\Beans\ActionDefinition;
 use App\Entity\Constants;
 use App\Exception\InvalidRequestException;
@@ -53,7 +52,7 @@ class ActionDefinitionEditController extends BaseController
                     if (empty($restrictionDate)) {
                         throw new InvalidRequestException("Missing Date Value");
                     }
-                    $ud = \DateTime::createFromFormat(Constants::DATE_FORMAT, $restrictionDate);
+                    $ud = DateTime::createFromFormat(Constants::DATE_FORMAT, $restrictionDate);
                     if (!$ud) {
                         throw new InvalidRequestException("Invalid Date Value");
                     }
@@ -75,8 +74,8 @@ class ActionDefinitionEditController extends BaseController
             $month = $calendarView->getMonth();
             $year = $calendarView->getYear();
             
-            $start = new \DateTime();
-            $end = new \DateTime();
+            $start = new DateTime();
+            $end = new DateTime();
             $start->setDate($year, $month, 1)->setTime(0, 0, 0);
             $end->setDate($year, $month + 1, 1)->setTime(0, 0, 0);
 

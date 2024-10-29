@@ -93,5 +93,3 @@ class ActionDefinition  extends BaseBean{
         $this->restrictionDate = $restrictionDate;
     }
 }
-
-?>

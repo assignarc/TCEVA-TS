@@ -245,4 +245,3 @@ class Person extends BaseBean{
         return false;
     }
 }
-?>

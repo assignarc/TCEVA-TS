@@ -110,5 +110,3 @@ class Patrol extends BaseBean{
         $this->person2Name = $person2Name;
     }
 }
-
-?>

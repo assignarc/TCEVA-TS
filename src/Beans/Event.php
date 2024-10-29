@@ -81,4 +81,3 @@ class Event  extends BaseBean{
     }
 }
 
-?>

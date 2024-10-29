@@ -131,5 +131,3 @@ class Activity  extends BaseBean{
         $this->note = $note;
     }
 }
-
-?>
