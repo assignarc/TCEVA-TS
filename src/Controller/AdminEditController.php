@@ -4,14 +4,13 @@ namespace App\Controller;
 
 use App\Beans\PersonFeature;
 use App\Traits\DatabaseAwareTrait;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Beans\Person;
-use App\Beans\FeatureType;
+use App\Entity\Constants;
 use App\Exception\InvalidRequestException;
 use App\Services\ValidationPatterns;
 use RuntimeException;
@@ -119,7 +118,7 @@ class AdminEditController extends BaseController
                         $fd = $this->getParm("Feature_" . $ft . "_dateChoice");
                         if ($fd !== null && trim($fd) !== '') {
                             $ud = DateTime::createFromFormat(
-                                \App\Entity\Constants::DATE_FORMAT, 
+                                Constants::DATE_FORMAT, 
                                 $fd, 
                                 new DateTimeZone('UTC'));
                                 

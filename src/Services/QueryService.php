@@ -8,12 +8,14 @@ use App\Beans\ActivityType;
 use App\Beans\FeatureType;
 use App\Beans\Person;
 use App\Beans\PersonFeature;
+use App\Entity\Constants;
 use App\Exception\DatabaseException;
 use App\Traits\LoggerAwareTrait;
 use DateTime;
 use Exception;
 use PDO;
 use PDOException;
+use PHPUnit\TextUI\XmlConfiguration\Constant;
 use stdClass;
 
 class QueryService {
@@ -248,18 +250,53 @@ class QueryService {
 
 		return $features;
 	}
+	// public function updatePersonAdmin(Person $person) {
+	// 	$updateStmt = "
+	// 		UPDATE person 
+	// 		SET joinDate = :joinDate, renewYear = :renewYear, newsAdmin = :newsAdmin, userAdmin = :userAdmin, 
+	// 			timeAdmin = :timeAdmin, copAdmin = :copAdmin, status = :status 
+	// 		WHERE id = :id";
+	
+	// 	try {
+	// 		$stmt = $this->dbConnection->prepare($updateStmt);
+	
+	// 		// Binding parameters
+	// 		$stmt->bindValue(':joinDate', $person->getJoinDate()->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
+	// 		$stmt->bindValue(':renewYear', $person->getRenewYear(), PDO::PARAM_INT);
+	// 		$stmt->bindValue(':newsAdmin', $person->isNewsAdmin(), PDO::PARAM_BOOL);
+	// 		$stmt->bindValue(':userAdmin', $person->isUserAdmin(), PDO::PARAM_BOOL);
+	// 		$stmt->bindValue(':timeAdmin', $person->isTimeAdmin(), PDO::PARAM_BOOL);
+	// 		$stmt->bindValue(':copAdmin', $person->isCopAdmin(), PDO::PARAM_BOOL);
+	// 		$stmt->bindValue(':status', $person->getStatus(), PDO::PARAM_STR);
+	// 		$stmt->bindValue(':id', $person->getId(), PDO::PARAM_INT);
+	
+	// 		$rows = $stmt->execute();
+	// 		return $rows > 0;  // Return true if any rows were updated
+	// 	} catch (PDOException $e) {
+	// 		throw new DatabaseException("DBError:" . __METHOD__ . " Message:" . $e->getMessage() ,previous:$e);
+	// 	}
+	// }
+
 	public function updatePersonAdmin(Person $person) {
+		$result = false;
 		$updateStmt = "
 			UPDATE person 
-			SET joinDate = :joinDate, renewYear = :renewYear, newsAdmin = :newsAdmin, userAdmin = :userAdmin, 
-				timeAdmin = :timeAdmin, copAdmin = :copAdmin, status = :status 
-			WHERE id = :id";
+			SET joinDate = :joinDate, 
+				renewYear = :renewYear, 
+				newsAdmin = :newsAdmin, 
+				userAdmin = :userAdmin, 
+				timeAdmin = :timeAdmin, 
+				copAdmin = :copAdmin, 
+				status = :status
+			WHERE id = :id
+		";
 	
 		try {
+			// Prepare the statement
 			$stmt = $this->dbConnection->prepare($updateStmt);
 	
-			// Binding parameters
-			$stmt->bindValue(':joinDate', $person->getJoinDate()->format(\App\Entity\Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date is passed as a string
+			// Bind parameters
+			$stmt->bindValue(':joinDate', $person->getJoinDate()->format(Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming this is formatted as a date string
 			$stmt->bindValue(':renewYear', $person->getRenewYear(), PDO::PARAM_INT);
 			$stmt->bindValue(':newsAdmin', $person->isNewsAdmin(), PDO::PARAM_BOOL);
 			$stmt->bindValue(':userAdmin', $person->isUserAdmin(), PDO::PARAM_BOOL);
@@ -268,11 +305,42 @@ class QueryService {
 			$stmt->bindValue(':status', $person->getStatus(), PDO::PARAM_STR);
 			$stmt->bindValue(':id', $person->getId(), PDO::PARAM_INT);
 	
-			$rows = $stmt->execute();
-			return $rows > 0;  // Return true if any rows were updated
+			// Execute the update
+			$rowCount = $stmt->execute();
+	
+			if ($rowCount > 0) {
+				// Fetch existing and new features
+				$oldFeatures = $this->getPersonFeatures($person->getId());
+				$newFeatures = $person->getFeatures();
+	
+				// Update or insert new features
+				foreach ($newFeatures as $newFeature) {
+					$found = false;
+					foreach ($oldFeatures as $key => $oldFeature) {
+						if ($oldFeature->getFeatureId() == $newFeature->getFeatureId()) {
+							$this->updatePersonFeature($newFeature);
+							unset($oldFeatures[$key]);  // Remove matched old feature
+							$found = true;
+							break;
+						}
+					}
+					if (!$found) {
+						$this->insertPersonFeature($person->getId(), $newFeature);
+					}
+				}
+	
+				// Delete any remaining old features not present in the new features
+				foreach ($oldFeatures as $oldFeature) {
+					$this->deletePersonFeature($oldFeature->getId());
+				}
+	
+				$result = true;
+			}
 		} catch (PDOException $e) {
 			throw new DatabaseException("DBError:" . __METHOD__ . " Message:" . $e->getMessage() ,previous:$e);
 		}
+	
+		return $result;
 	}
 	public function updatePersonAccess(Person $person) {
 		$updateStmt = "
@@ -333,7 +401,7 @@ class QueryService {
 	
 		return $id;  // Returning the new person's ID
 	}
-	public function insertPersonFeature($personId, $feature) {
+	public function insertPersonFeature(int $personId, PersonFeature $feature) {
 		$insertStmt = "
 			INSERT INTO personFeature (personId, featureId, featureDate, featureLabel) 
 			VALUES (:personId, :featureId, :featureDate, :featureLabel)";
@@ -343,9 +411,9 @@ class QueryService {
 	
 			// Binding parameters
 			$stmt->bindValue(':personId', $personId, PDO::PARAM_INT);
-			$stmt->bindValue(':featureId', $feature['featureId'], PDO::PARAM_INT);
-			$stmt->bindValue(':featureDate', $feature['featureDate'], PDO::PARAM_STR);  // Assuming date as a string
-			$stmt->bindValue(':featureLabel', $feature['featureLabel'], PDO::PARAM_STR);
+			$stmt->bindValue(':featureDate', $feature->getFeatureDate()->format(Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date as a string
+			$stmt->bindValue(':featureLabel', $feature->getFeatureLabel(), PDO::PARAM_STR);
+			$stmt->bindValue(':featureId', $feature->getFeatureId(), PDO::PARAM_INT);
 	
 			$rows = $stmt->execute();
 			return $rows > 0;  // Return true if the insert was successful
@@ -353,19 +421,19 @@ class QueryService {
 			throw new DatabaseException("DBError:" . __METHOD__ . " Message:" . $e->getMessage() ,previous:$e);
 		}
 	}
-	public function updatePersonFeature($feature) {
+	public function updatePersonFeature(PersonFeature $feature) {
 		$updateStmt = "
 			UPDATE personFeature 
 			SET featureDate = :featureDate, featureLabel = :featureLabel 
-			WHERE featureId = :featureId";
+			WHERE id = :id";
 	
 		try {
 			$stmt = $this->dbConnection->prepare($updateStmt);
 	
 			// Binding parameters
-			$stmt->bindValue(':featureDate', $feature['featureDate'], PDO::PARAM_STR);  // Assuming date as a string
-			$stmt->bindValue(':featureLabel', $feature['featureLabel'], PDO::PARAM_STR);
-			$stmt->bindValue(':featureId', $feature['featureId'], PDO::PARAM_INT);
+			$stmt->bindValue(':featureDate', $feature->getFeatureDate()->format(Constants::DATE_FORMAT), PDO::PARAM_STR);  // Assuming date as a string
+			$stmt->bindValue(':featureLabel', $feature->getFeatureLabel(), PDO::PARAM_STR);
+			$stmt->bindValue(':id', $feature->getId(), PDO::PARAM_INT);
 	
 			$rows = $stmt->execute();
 			return $rows > 0;  // Return true if any rows were updated
