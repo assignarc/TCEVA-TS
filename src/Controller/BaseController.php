@@ -142,7 +142,7 @@ class BaseController extends AbstractController
         $this->cookiesResponse[] =Cookie::create($key)
                 ->withValue($value)
                 ->withExpires($expires)
-                ->withDomain("127.0.0.1")
+                ->withDomain("/")
                 ->withSecure($secure);
     }
 
