@@ -30,16 +30,15 @@ trait MailerAwareTrait{
                 $this->logInfo("Subject: ". $emailSubject);
                 $this->logInfo("Body: " . $emailBody);
             }
-            else{
             
-                $email = (new Email())
-                    ->from('no-reply@member.tceva.us')
-                    ->to($toAddress)
-                    ->subject($emailSubject)
-                    ->html($emailBody);
-                //$this->mailer->send($email);
-                $this->logInfo("Email Sent: Subject:" . $emailSubject . " To:" . $toAddress );
-            }
+            $email = (new Email())
+                ->from(addresses: 'no-reply@member.tceva.us')
+                ->to(addresses: $toAddress)
+                ->subject(subject: $emailSubject)
+                ->html(body: $emailBody);
+            $this->mailer->send(message: $email);
+            $this->logInfo("Email Sent: Subject:" . $emailSubject . " To:" . $toAddress );
+            
         }
         catch(Exception $e){
             throw new BaseException("Email Error:" . __METHOD__ . " Message:" . $e->getMessage() ,previous:$e);
