@@ -365,8 +365,17 @@ class QueryService {
 		$id = -1;
 		$insertStmt = "
 			INSERT INTO person 
-			(firstName, lastName, login, addressLine1, addressLine2, city, state, postal, phone, carrier, email, birthMonth, birthDay, emergencyContactName, emergencyContactPhone, joinDate, renewYear, status) 
-			VALUES (:firstName, :lastName, :login, :addressLine1, :addressLine2, :city, :state, :postal, :phone, :carrier, :email, :birthMonth, :birthDay, :emergencyContactName, :emergencyContactPhone, :joinDate, :renewYear, :status)";
+				(firstName, lastName, login, 
+				addressLine1, addressLine2, city, state, postal, 
+				phone, carrier, email, 
+				birthMonth, birthDay, emergencyContactName, emergencyContactPhone, 
+				joinDate, renewYear, status) 
+			VALUES 
+				(:firstName, :lastName, :login, 
+				:addressLine1, :addressLine2, :city, :state, :postal, 
+				:phone, :carrier, :email, 
+				:birthMonth, :birthDay, :emergencyContactName, :emergencyContactPhone, 
+				:joinDate, :renewYear, :status)";
 	
 		try {
 			$stmt = $this->dbConnection->prepare($insertStmt);
