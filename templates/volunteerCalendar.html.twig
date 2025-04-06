@@ -32,7 +32,7 @@
 				var name = p.lastName + ", " + p.firstName;
 				name = name.replace("'","&quot;");
 				data += "<label class='long' >SignedUp</label><input type='hidden' id='joinId[]' name='joinId[]' value='"+p.id+"'><input name='joinName[]' type='text' readonly value='"+name+"'>";
-				data += "<button type='button' class='btn btn-info btn-xs' onclick='deletePerson("+p.id+")'>&#10006;</button> <--Hit button to remove<br>";
+				data += "<button type='button' class='btn btn-info btn-xs' onclick='deletePerson("+p.id+")'>&#10006;</button> <--Click X to remove<br>";
 			}
 		}
 		document.getElementById("signedup").innerHTML = data;
@@ -50,7 +50,7 @@
 				var name = ids[i].value;
 				name = name.replace("'","&quot;");
 				data += "<label class='long' >SignedUp</label><input type='hidden' id='joinId[]' name='joinId[]' value='"+name+"'><input name='joinName[]' type='text' readonly value='"+names[i].value+"'>";
-				data += "<button type='button' class='btn btn-info btn-xs' onclick='deletePerson("+ids[i].value+")'>&#10006;</button> <--Hit button to remove<<br>";
+				data += "<button type='button' class='btn btn-info btn-xs' onclick='deletePerson("+ids[i].value+")'>&#10006;</button> <--Click X to remove<<br>";
 			}
 		}
 		document.getElementById("signedup").innerHTML = data;
@@ -82,8 +82,22 @@
 		name = name.replace("'","&quot;");
 		var data = document.getElementById("signedup").innerHTML;
 		data += "<label class='long'>SignedUp</label><input type='hidden' id='joinId[]' name='joinId[]' value="+id+"><input name='joinName[]' type='text' readonly value='"+name+"'>";
-		data += "<button type='button' class='btn btn-info btn-xs' onclick='deletePerson("+id+")'>&#10006;</button> <--Hit button to remove<br>";
+		data += "<button type='button' class='btn btn-info btn-xs' onclick='deletePerson("+id+")'>&#10006;</button> <--Click X to remove<br>";
 		document.getElementById("signedup").innerHTML = data;
+	}
+	function validate(act){
+		if(document.getElementsByName("joinName[]").length < 1 || document.getElementById("actionTypeChoice").value < 1 || document.getElementById("noteChoice").value.length < 1)
+			$.alert({
+				title: 'Alert!',
+				content: 'Action, Member and notes are required for Signup.',
+				type: 'red',
+				boxWidth: '40%',
+    			useBootstrap: false,
+			});
+		else {
+			setAction(act);
+		}
+
 	}
 </script>
 
@@ -255,16 +269,17 @@
 				  	{# </c:forEach> #}
 					{% endfor %}
 				</select>
-				<button type='button' onclick='addPerson()'>&#10133;</button> <-- Hit Button to Add<br>";
+				<button type='button' onclick='addPerson()'>&#10133;</button> <--Click + to Add<br>
 				</span>
 				<br><span class="psw"><label for="dateChoice">Date:</label> 
 				<input type="date" id="dateChoice" name="dateChoice" required readonly></span>
 				<br><span class="psw"><label  for="noteChoice">Note/Time:</label> 
 				<input type="text" id="noteChoice" name="noteChoice" required ></span>
 			</div>
+			<!--TEST-->
 			<div class="container" style="background-color: #f1f1f1">
-				<button onclick="setAction('Save');" type="button" class="savebtn">Save</button>
-				<button onclick="setAction('Delete');" type="button" class="deletebtn">Delete</button>
+				<button onclick="validate('Save');" type="button" class="savebtn">Save</button>
+				<button onclick="validate('Delete');" type="button" class="deletebtn">Delete</button>
 				<button type="button" class="cancelbtn"
 					onclick="document.getElementById('modalPopup').style.display='none'">Cancel</button>
 			</div>

@@ -1,16 +1,13 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-	<script>
-		function redraw(box) {
-        document.getElementById("showAllChoice").value = box.checked;
-        document.getElementById("activityIdChoice").value = -1;
-        document.getElementById("submitChoice").value = "";
-        document.getElementById("modalForm").submit();
-    }
-	</script>
-
 
 	<script type="text/javascript">
+		function redraw(box) {
+			document.getElementById("showAllChoice").value = box.checked;
+			document.getElementById("activityIdChoice").value = -1;
+			document.getElementById("submitChoice").value = "";
+			document.getElementById("modalForm").submit();
+		}
 		// called by the user selecting the pencil.  Loads the popup with selected values
       function editTimeEntry(actStr) {
           var act = JSON.parse(atob(actStr));
@@ -45,6 +42,20 @@
             x[i].className = cl;
           }
       }
+	  function validate(act){
+		if(document.getElementById("dateChoice").value == '' || document.getElementById("activityTypeChoice").value < 1 || document.getElementById("hoursChoice").value < 0.1 || document.getElementById("noteChoice").value.length < 1)
+			$.alert({
+				title: 'Alert!',
+				content: 'Date, Activity, Hours and Notes are required for time reporting.',
+				type: 'red',
+				boxWidth: '40%',
+    			useBootstrap: false,
+			});
+		else {
+			setAction(act);
+		}
+
+	}
 	</script>
 	<div class="main">
 		<h3 style="color:black;background-color:LightCoral;">
@@ -140,8 +151,8 @@
 				<input type="text" id="noteChoice" name="noteChoice" required>
 			</div>
 			<div class="container" style="background-color: #f1f1f1">
-				<button onclick="setAction('Save');" type="button" class="savebtn">Save</button>
-				<button onclick="setAction('Delete');" type="button" class="deletebtn">Delete</button>
+				<button onclick="validate('Save');" type="button" class="savebtn">Save</button>
+				<button onclick="validate('Delete');" type="button" class="deletebtn">Delete</button>
 				<button type="button" class="cancelbtn" onclick="document.getElementById('modalPopup').style.display='none'">Cancel</button>
 			</div>
 		</form>

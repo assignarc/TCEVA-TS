@@ -87,7 +87,8 @@ class QueryService {
 		$activityTypes = [];
 		$activityStmt = "
 			SELECT id, name, stat 
-			FROM activityType";
+			FROM activityType 
+			WHERE stat = 'A'";
 	
 		try {
 			$stmt = $this->dbConnection->prepare($activityStmt);
