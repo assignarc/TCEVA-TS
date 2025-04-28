@@ -812,8 +812,10 @@ class QueryService {
 	public function getActionDefinitions() {
 		$list = [];
 		$actionDefStmt = "
-			SELECT id, name, description, restrictionType, restrictionValue, restrictionDate 
-			FROM actionDefinition";
+			SELECT id, name, description, restrictionType, restrictionValue, restrictionDate , stat
+			FROM actionDefinition 
+			WHERE STAT = 'A'
+			";
 	
 		try {
 			$stmt = $this->dbConnection->prepare($actionDefStmt);
@@ -824,6 +826,7 @@ class QueryService {
 				$actionDef->setId($row['id']);
 				$actionDef->setName($row['name']);
 				$actionDef->setDescription($row['description']);
+				$actionDef->setStatus($row['stat']);
 				$actionDef->setRestrictionType($row['restrictionType']);
 				$actionDef->setRestrictionValue($row['restrictionValue']);
 				$actionDef->setRestrictionDate($row['restrictionDate'] ? new DateTime($row['restrictionDate']) : new DateTime('0000-01-01') );

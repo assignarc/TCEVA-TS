@@ -25,7 +25,7 @@ class ActionEditController extends BaseController
     private $actionBody = " <html><body> "
         . " <b><i>This email was auto-generated.</b></i><br>"
         . " <h4>DO NOT REPLY TO THIS EMAIL</h4><br>"
-        . " This email is to confirm  Signup as followings,<br>"
+        . " This email is to confirm  Signup as following,<br>"
         . " <br>"
         . " Action        :<b>%actionCommand%</b> <br>"
         . " Activity      :<b>%actionName%</b> <br>"

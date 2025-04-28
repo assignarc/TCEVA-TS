@@ -13,6 +13,8 @@ class ActionDefinition  extends BaseBean{
     private $restrictionValue;
     private $restrictionDate;
 
+    private $status;
+
     private $dateFormat = \App\Entity\Constants::DATE_FORMAT;
     private $json;
 
@@ -60,7 +62,13 @@ class ActionDefinition  extends BaseBean{
     public function setName($name) {
         $this->name = $name;
     }
+    public function getStatus() {
+        return $this->status;
+    }
 
+    public function setStatus($status) {
+        $this->status = $status;
+    }
     public function getDescription() {
         return $this->description;
     }

@@ -37,8 +37,8 @@ class ReportDatesService
         $this->numberOfMonths = 12;
 
         if ($periodStr == null || str_starts_with($periodStr, 'y')) {
-            $this->startC->setDate($year - 1, 12, 31)->setTime(23, 59, 59);
-            $this->endC->setDate($year + 1, 1, 1)->setTime(0, 0, 0);
+            $this->startC->setDate($year, 1, 1)->setTime(0, 0, 0);
+            $this->endC->setDate($year+1, 1, 1)->setTime(0, 0, 0);
             $this->timeLabel= $year;
         } elseif (strlen($periodStr) == 2 && str_starts_with($periodStr, 'q')) {
             $quarter = (int)substr($periodStr, 1);

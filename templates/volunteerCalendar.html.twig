@@ -178,6 +178,8 @@
 				</tr><tr>
 		    </c:if>
 		</c:forEach> #}
+		{% set today = 'now'|date('m/d/Y') %}
+
 		{% for cnt in 0..40 %}
 			{% set i = cnt - dow +2 %}
 			
@@ -189,9 +191,14 @@
 				<td>
 					<h4>{{ i }}</h4>
 					{% if loggedInUser.status == 'M' or loggedInUser.status == 'A' %}
-						<a href="#" onclick="edit('{{ emptyAction.json|escape('js') }}', {{ year }}, {{ month  }}, {{ i }});">
-							&#9998;
-						</a>
+						{% set signupDate = date(year ~ '-' ~ month ~ '-' ~ i )|date('m/d/Y') %}
+						{% if today <= signupDate %}
+							<a href="#" onclick="edit('{{ emptyAction.json|escape('js') }}', {{ year }}, {{ month  }}, {{ i }});">
+								<span class="material-symbols-outlined" style="color:blue">edit</span>
+							</a>
+						{% else %}
+							<span class="material-symbols-outlined" title="Signup ended">edit_off</span>
+						{% endif %}
 					{% endif %}
 					{% for action in actions %}
 						{% if action != null and i == action.day|date('d') %}

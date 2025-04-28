@@ -47,7 +47,8 @@
                 <th>Description</th>
                 <th>Restriction</th>
                 <th>Restriction Value</th>
-                <th></th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -70,6 +71,15 @@
 							{{ daysOfWeek[actionDef.restrictionValue-1] }}
                         {% elseif actionDef.restrictionType == 2 %}
                             {{ actionDef.restrictionDate|date('Y-m-d') }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if actionDef.status == 'A' %}
+                            Active
+                        {% elseif actionDef.status == 'I' %}    
+                            Inactive
+                        {%  else %}
+                            Unknown
                         {% endif %}
                     </td>
                     <td><a href="javascript:editAd('{{ actionDef.json }}');">Edit</a></td>
