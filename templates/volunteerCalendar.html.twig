@@ -38,6 +38,20 @@
 		document.getElementById("signedup").innerHTML = data;
 		document.getElementById("dateChoice").value = thisDay;
 		document.getElementById("noteChoice").value = action.note;
+
+		var dateAction = new Date(document.getElementById('dateChoice').value);
+		var today = new Date();
+		if(dateAction < today){
+			document.getElementById("saveButton").style.visibility = 'hidden';
+			document.getElementById("deleteButton").style.visibility = 'hidden';
+			document.getElementById("readonlymessage").innerHTML = "This signup is in past and cannot be changed.";
+		}
+		else{
+			document.getElementById("saveButton").style.visibility = 'visible';
+			document.getElementById("deleteButton").style.visibility = 'visible';
+			document.getElementById("readonlymessage").innerHTML = "";
+		}
+
 		modalPopup();
 	}
 	function deletePerson(pid){
@@ -134,50 +148,6 @@
 		</tr>
 	</thead>
 	<tr>
-		{# <c:forEach var="cnt" varStatus="loop" begin="0" end="40">
-			<c:set var="i" value="${loop.index-dow + 2}" />
-			<c:if test="${i <= 0}">
-				<td></td>
-			</c:if>
-			<c:if test="${i > 0 && i<=dim }">
-				<td><h4>${i}</h4>
-				   <c:if test='${loggedInUser.status == "M" || loggedInUser.status == "A"}'>
-					<a href="#" onclick="edit('${emptyAction.json}', ${year}, ${month+1}, ${i});">
-						&#9998;
-					</a>
-					</c:if>
-				
-					<c:forEach items="${actions}" var="action">
-						<c:if test="${i == action.day.date}">
-							<div class="ttbt">
-							  <c:choose>
-							  <c:when test='${loggedInUser.status == "M" || loggedInUser.status == "A"}'>
-							   <a data-toggle="modal" href="#addEditAction" onclick="edit('${action.json}', ${action.day.year+1900}, ${action.day.month+1}, '${action.day.date}');">${action.actionName += "(" += action.personSize += ")"}</a>
-							   <span class="tttt">${action.actionName}
-							   <c:forEach items="${action.persons }" var="p">
-							   <br>${people.lastName += ", " += p.firstName }
-							   </c:forEach>
-							   </span>
-							  </c:when>
-							  <c:otherwise>
-							  ${action.actionName += "(" += action.personSize += ")"}
-							  <span class="tttt">${action.actionName}
-							   <c:forEach items="${action.persons }" var="p">
-							   <br>${p.lastName += ", " += p.firstName }
-							   </c:forEach>
-							   </span>
-							  </c:otherwise>
-							  </c:choose>
-							 </div>
-						</c:if>
-					</c:forEach>
-				
-					</td>
-			</c:if>
-			<c:if test="${(i+dow)%7 == 1 }">
-				</tr><tr>
-		    </c:if>
-		</c:forEach> #}
 		{% set today = 'now'|date('m/d/Y') %}
 
 		{% for cnt in 0..40 %}
@@ -249,10 +219,8 @@
 				<select id="actionTypeChoice" name="actionTypeChoice" onchange="changeAction(this)">
 					<option value="0">Select an Action</option>
 					{% for actionDef in actionDefinitions %}
-					{# <c:forEach items="${actionDefinitions}" var="actionDef"> #}
 					<option value="{{actionDef.id}}">{{actionDef.name }}</option>
 					{% endfor %}
-					{# </c:forEach> #}
 				</select></span>
 				<div id="signedup" >
 						oldstuff
@@ -262,18 +230,11 @@
 				<select id="volChoice" name="volChoice">
 					<option value="0">Select a Member</option>
 					{% for person in people %}
-					{# <c:forEach items="${people }" var="person"> #}
 						{% set cop='' %}
-						{# <c:set var="cop" value=""/> #}
-						{# <c:if test='${person.hasFeature("COP")  == true}' >
-								<c:set var="cop" value="cop"/>
-						</c:if> #}
 						{% if person.hasFeature('COP') == true %}
 							{% set cop = 'cop' %}
 						{% endif %}
 				  	    <option class="{{cop}}" value="{{person.id}}" >{{person.lastName  ~ ', ' ~ person.firstName }}</option>
-					{# <option class="${cop}" value="${person.id }" >${person.lastName += ", " += person.firstName }</option> #}
-				  	{# </c:forEach> #}
 					{% endfor %}
 				</select>
 				<button type='button' onclick='addPerson()'>&#10133;</button> <--Click + to Add<br>
@@ -282,20 +243,17 @@
 				<input type="date" id="dateChoice" name="dateChoice" required readonly></span>
 				<br><span class="psw"><label  for="noteChoice">Note/Time:</label> 
 				<input type="text" id="noteChoice" name="noteChoice" required ></span>
+				<div id="readonlymessage" class="readonlymessage"></div>
 			</div>
-			<!--TEST-->
+			
 			<div class="container" style="background-color: #f1f1f1">
-				<button onclick="validate('Save');" type="button" class="savebtn">Save</button>
-				<button onclick="validate('Delete');" type="button" class="deletebtn">Delete</button>
+				<button onclick="validate('Save');" type="button" class="savebtn" id="saveButton">Save</button>
+				<button onclick="validate('Delete');" type="button" class="deletebtn" id="deleteButton">Delete</button>
 				<button type="button" class="cancelbtn"
 					onclick="document.getElementById('modalPopup').style.display='none'">Cancel</button>
 			</div>
-
 		</form>
 	</div>
 			
-<script>
-//edit('${actions[0].json}', ${actions[0].day.year+1900}, ${actions[0].day.month+1}, '${actions[0].day.date}');
 
-</script>
 {% endblock %}
