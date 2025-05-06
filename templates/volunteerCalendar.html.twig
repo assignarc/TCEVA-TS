@@ -14,6 +14,24 @@
 		document.getElementById("newYear").value = year;
 		document.getElementById("newDateForm").submit();
 	}
+	const yesterday = () => {
+			const today = new Date();
+			const day = new Date();
+
+			day.setDate(today.getDate() - 1);
+			day.setHours(0, 0, 0, 0);
+
+			return day;
+		};
+	const today = () => {
+			const today = new Date();
+			const day = new Date();
+
+			day.setDate(today.getDate());
+			day.setHours(0, 0, 0, 0);
+
+			return day;
+		};
 	function edit(actionStr, year, month, day){
 		var action = JSON.parse(atob(actionStr));
 		var day = ("0" + day).slice(-2);
@@ -39,9 +57,14 @@
 		document.getElementById("dateChoice").value = thisDay;
 		document.getElementById("noteChoice").value = action.note;
 
-		var dateAction = new Date(document.getElementById('dateChoice').value);
-		var today = new Date();
-		if(dateAction < today){
+		var dateAction = new Date(thisDay);
+		dateAction.setHours(0, 0, 0, 0);
+		
+		console.log("dateAction: " + dateAction);
+		console.log("today: " + yesterday());
+		console.log("yesterday() > dateAction: " + (yesterday() > dateAction));
+
+		if(yesterday() > dateAction){
 			document.getElementById("saveButton").style.visibility = 'hidden';
 			document.getElementById("deleteButton").style.visibility = 'hidden';
 			document.getElementById("readonlymessage").innerHTML = "This signup is in past and cannot be changed.";
