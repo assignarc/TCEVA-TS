@@ -9,14 +9,14 @@
 		<link rel="stylesheet" type="text/css" href="/css/style.css">
 		<script type="text/javascript" src="/js/modal.js"></script>
 
-        <link rel="icon" href="/images/favicon-16x16-1.png" sizes="32x32" />
-		<link rel="icon" href="/images/favicon-16x16-1.png" sizes="192x192" />
-		<link rel="apple-touch-icon" href="/images/favicon-16x16-1.png" />
+        <link rel="icon" href="/images/favicon-16x16.png" sizes="32x32" />
+		<link rel="icon" href="/images/android-chrome-192x192.png" sizes="192x192" />
+		<link rel="apple-touch-icon" href="/images/favicon-16x16.png" />
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 		<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-		<meta name="msapplication-TileImage" content="/images/favicon-16x16-1.png" />
+		<meta name="msapplication-TileImage" content="/images/favicon-16x16.png" />
 
 	</head>
 	<body style="margin:0;height:100%">
@@ -26,7 +26,7 @@
 				Home
 			</a>
 			 {% set loggedInUser =  app.session.get('loggedInUser') %}
-			 {% if loggedInUser  is not null %}
+			 {% if loggedInUser is not null %}
     			<a href="/action/edit?reload={{date()| date('U') * 1000 }}">Sign Up!</a> 
 				<a href="/report/selector?reload={{date()| date('U') * 1000 }}" >Reports</a>
 				<a href="/time/edit?reload={{date()| date('U') * 1000 }}" >Time</a> 
@@ -47,7 +47,9 @@
 				<H3 style="margin:auto; color:red;text-align:center">{{app.environment}} environment</div><br>
 			{% endif %}
 		  
-           {% block body %}		{% endblock %}
+           {% block body %}		
+		   
+		   {% endblock %}
 		</div>
 		<div class="bottomBar" style="text-align:center">
 			
