@@ -131,9 +131,12 @@ button {
 
 .calendar-month {
 	text-align: center;
-	font-size: 14px;
+	font-size: x-large;
 }
-
+.calendar-month a {
+	text-decoration: none;
+	font-size: xx-large;
+}
 .ttbt {
 	position: relative;
 	/* display: inline-block; */
@@ -602,6 +605,12 @@ label.shortLeft {
 
 
 /*Table*/
+.th {
+	background-color: #cfe0e8;
+	text-align: center;
+	font-weight: bold;
+	font-size: larger;
+}
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -609,6 +618,7 @@ table {
 	max-width: none;
 	border: 2px solid #5f717f;
 	font-size: small;
+	margin-top:10px;
   }
   
   th, td {
@@ -631,6 +641,7 @@ table {
   
   .calendar td {
 	  background-color: #b7d7e8;
+	  width: 70px;
   }
   
   .tablestripedbw tr:nth-child(even){background-color: lightgrey;}
@@ -646,6 +657,13 @@ table {
   .totalRow  {
 	  background-color: lightgrey
   }
+  h4{
+	text-align: right;
+	font-size: x-large;
+	font-family: cursive;
+	margin-block-end: 0em;
+    margin-block-start: 0;
+  }
 
   /*Modal form*/
   input[type=text], input[type=password], input[type=file] {
@@ -655,6 +673,9 @@ table {
 	box-sizing: border-box;
 	font-size: 15px;
 	display: inline-block;
+}
+.todayCell{
+	background-color: #f7e3e3 !important;
 }
 
 input[type=date], input[type=number] {

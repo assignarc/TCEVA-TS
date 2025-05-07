@@ -143,33 +143,42 @@
   <input type="hidden" id="newMonth" name="newMonth" />
   <input type="hidden" id="newYear" name="newYear" />
 </form>
-<h3 style="color:black;background-color:LightCoral;">
+
 	{% for label, messages in app.flashes %}
+		<h3 style="color:black;background-color:LightCoral;">
 		{% for message in messages %}
+
 			<div class="flash-{{ label }}">
 				{{ message }}
 			</div>
 		{% endfor %}
+		</h3>
 	{% endfor %}
-</h3>
+
 <div class="title">Volunteer Signups</div>
 <a class="instruction" href="/pages/signupInstructions.html">Instructions</a>
 <div style="clear: both;"></div>
 {% if loggedInUser.copAdmin == true %}
    <a href="/action/definition/edit" target="workframe">Manage Signup Events</a>
 {% endif %}
-<div class='calendar-month'>
-	<a href="javascript:moveMonth({{month}}, {{year}}, -1)">&#10094;</a>
-	&nbsp;&nbsp;&nbsp;{{months[month-1]}}&nbsp;&nbsp;&nbsp;
-	<a href="javascript:moveMonth({{month}}, {{year}}, +1)">&#10095;</a>&nbsp;&nbsp;&nbsp;{{year}}</div>
+
 <table class="calendar">	
-	<thead>
-		<tr>
+	<tr>
+		<th colspan="7">
+			<div class='calendar-month'>
+				<a href="javascript:moveMonth({{month}}, {{year}}, -1)">&#8701;</a>
+				&nbsp;&nbsp;&nbsp;{{months[month-1]}}&nbsp;{{year}}&nbsp;&nbsp;&nbsp;
+				<a href="javascript:moveMonth({{month}}, {{year}}, +1)">&#8702;</a>
+			</div>
+		</th>
+	</tr>
+	<tr>
 			{% for day in days %}
-				<th>{{day}}</th>
+				<td class="th">{{day}}</td>
 			{% endfor %}
-		</tr>
-	</thead>
+
+	</tr>
+	
 	<tr>
 		{% set today = 'now'|date('m/d/Y') %}
 
@@ -181,10 +190,11 @@
 			{% endif %}
 			
 			{% if i > 0 and i <= dim %}
-				<td>
+				{% set signupDate = date(year ~ '-' ~ month ~ '-' ~ i )|date('m/d/Y') %}
+				<td {% if today == signupDate %}class="todayCell"{% endif %}>
 					<h4>{{ i }}</h4>
 					{% if loggedInUser.status == 'M' or loggedInUser.status == 'A' %}
-						{% set signupDate = date(year ~ '-' ~ month ~ '-' ~ i )|date('m/d/Y') %}
+						
 						{% if today <= signupDate %}
 							<a href="#" onclick="edit('{{ emptyAction.json|escape('js') }}', {{ year }}, {{ month  }}, {{ i }});">
 								<span class="material-symbols-outlined" style="color:blue">edit</span>
