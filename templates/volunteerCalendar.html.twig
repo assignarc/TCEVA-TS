@@ -166,9 +166,13 @@
 	<tr>
 		<th colspan="7">
 			<div class='calendar-month'>
-				<a href="javascript:moveMonth({{month}}, {{year}}, -1)">&#8701;</a>
+				<a href="javascript:moveMonth({{month}}, {{year}}, -1)">
+					<span class="material-symbols-outlined material-next-prev">fast_rewind</span>
+				</a>
 				&nbsp;&nbsp;&nbsp;{{months[month-1]}}&nbsp;{{year}}&nbsp;&nbsp;&nbsp;
-				<a href="javascript:moveMonth({{month}}, {{year}}, +1)">&#8702;</a>
+				<a href="javascript:moveMonth({{month}}, {{year}}, +1)">
+					<span class="material-symbols-outlined material-next-prev">fast_forward</span>
+				</a>
 			</div>
 		</th>
 	</tr>
@@ -207,9 +211,12 @@
 						{% if action != null and i == action.day|date('d') %}
 							<div class="ttbt">
 								{% if loggedInUser.status == 'M' or loggedInUser.status == 'A' %}
-									<a data-toggle="modal" href="#addEditAction" onclick="edit('{{ action.json|escape('js') }}', {{ action.day|date("Y")}}, {{ action.day|date("m") }}, {{ action.day|date("d") }});">
-										{{ action.actionName }} ({{ action.personSize }})
-									</a>
+									<a data-toggle="modal" class="modalactionname" href="#addEditAction" onclick="edit('{{ action.json|escape('js') }}', {{ action.day|date("Y")}}, {{ action.day|date("m") }}, {{ action.day|date("d") }});">
+										{{ action.actionName }} 
+									</a>&nbsp;
+									{% for p in action.persons %}
+										<span class="material-symbols-outlined material-person">person</span>
+									{% endfor %}
 									<span class="tttt">{{ action.actionName }}
 										{% for p in action.persons %}
 											<br>{{ p.lastName }}, {{ p.firstName }}

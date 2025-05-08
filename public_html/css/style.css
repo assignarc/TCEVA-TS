@@ -641,7 +641,7 @@ table {
   
   .calendar td {
 	  background-color: #b7d7e8;
-	  width: 70px;
+	  width: 200px;
   }
   
   .tablestripedbw tr:nth-child(even){background-color: lightgrey;}
@@ -855,13 +855,26 @@ label.shortLeft {
 
 .material-symbols-outlined {
 	font-size: 19px !important;
-  font-variation-settings:
-	'FILL' 0,
-	'wght' 400,
-	'GRAD' 0,
-	'opsz' 20
+	font-variation-settings:
+		'FILL' 0,
+		'wght' 400,
+		'GRAD' 0,
+		'opsz' 20
 }
 
+.material-person{
+	vertical-align: text-bottom;
+	font-size: 20px !important;
+}
+.material-next-prev{
+	font-size:32px !important;
+	vertical-align:text-bottom
+}
+
+.modalactionname{
+	min-width: 90px;
+	display: inline-block;
+}
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
 	span.psw {
