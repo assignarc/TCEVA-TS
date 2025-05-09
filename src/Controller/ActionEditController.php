@@ -129,22 +129,25 @@ class ActionEditController extends BaseController
         $calendar = $calendarView->calcCalendarDetails($this->request);
         $month = $calendarView->getMonth();
         $year = $calendarView->getYear();
-        $start = new DateTime('now');
-        $end = new DateTime('now');
+        $start = new DateTime(datetime: 'now');
+        $end = new DateTime(datetime: 'now');
 
-        $start->setDate($year, $month, 1);
-        $start->setTime(0, 0, 0);
-        $start->modify('-1 second');
+        $start->setDate(year: $year, month: $month, day: 1);
+        $start->setTime(hour: 0, minute: 0, second: 0);
 
-        $end->setDate($year, $month + 1, 1);
-        $end->setTime(0, 0, 0);
+        // DO NOT set the time to 23:59:59, as it will not work with the date range, 
+        // because it pulls records from last day of the previous month.
+        //$start->modify('-1 second');
+
+        $end->setDate(year: $year, month: $month + 1, day: 1);
+        $end->setTime(hour: 0, minute: 0, second: 0);
         $actionDefinitions = $this->queryService->getActionDefinitions();
         $actions = $this->queryService->getActions(
-            $start->format(\App\Entity\Constants::DATE_FORMAT),
-            $end->format(\App\Entity\Constants::DATE_FORMAT));
+            start: $start->format(format: \App\Entity\Constants::DATE_FORMAT),
+            end: $end->format(format: \App\Entity\Constants::DATE_FORMAT));
         $emptyAction = new Action();
-        $emptyAction->setId(-1);
-        $emptyAction->setActionDefinition(0);
+        $emptyAction->setId(id: -1);
+        $emptyAction->setActionDefinition(actionDefinition: 0);
 
         return $this->render('volunteerCalendar.html.twig', [
             'actionDefinitions' => $actionDefinitions,
@@ -196,14 +199,14 @@ class ActionEditController extends BaseController
     {
         if (ActionDefinition::RESTRICTION_DAY_OF_WEEK === $usedAd->getRestrictionType()) {
             $restrictDay = (int) $usedAd->getRestrictionValue();
-            $dow = (int) $day->format('N'); // Day of the week (1 for Monday, 7 for Sunday)
+            $dow = (int) $day->format(format: 'N'); // Day of the week (1 for Monday, 7 for Sunday)
 
             if ($dow === $restrictDay) {
-                throw new InvalidRequestException("This action is not valid on " . $day->format('l'));
+                throw new InvalidRequestException(message: "This action is not valid on " . $day->format(format: 'l'));
             }
         } elseif ($usedAd->getRestrictionType() == ActionDefinition::RESTRICTION_DATE) {
-            if ($usedAd->getRestrictionDate()->format($this->dateFormat) == $day->format($this->dateFormat)) {
-                throw new InvalidRequestException("This action is not valid on " . $day->format($this->dateFormat));
+            if ($usedAd->getRestrictionDate()->format(format: $this->dateFormat) == $day->format(format: $this->dateFormat)) {
+                throw new InvalidRequestException(message: "This action is not valid on " . $day->format(format: $this->dateFormat));
             }
         }
 

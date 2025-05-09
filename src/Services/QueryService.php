@@ -954,7 +954,6 @@ class QueryService {
 	
 		try {
 			$this->logInfo($actionId);
-		
 			$stmt = $this->dbConnection->prepare($actionStmt);
 			$stmt->bindValue(':id', $actionId, PDO::PARAM_STR);  // Assuming date is passed as a string
 		
