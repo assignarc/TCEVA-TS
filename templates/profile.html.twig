@@ -68,28 +68,7 @@
         {% endfor %}
     }
     
-    function showGroup() {
-        var i;
-        var x = document.getElementsByClassName("MemberGroup");
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-            var cl = x[i].className;
-            cl = cl.replace("tableEven", "");
-            cl = cl.replace("tableOdd", "");
-            x[i].className = cl;
-        }
-        var show = document.getElementById("memberType").value;
-        x = document.getElementsByClassName(show);
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = "";
-            var cl = x[i].className;
-            if (i % 2 == 0)
-                cl += " tableEven";
-            else
-                cl += " tableOdd";
-            x[i].className = cl;
-        }
-    }
+   
     function showtab(event, show) {
         if (event != null)
             event.preventDefault();
@@ -115,58 +94,43 @@
             {% endfor %}
         {% endfor %}
         </h3>
-        <div class="title">Member Administration</div>
-    
-        {% if admin %}
-            Person Type
-            <select id="memberType" onchange="showGroup()">
-                <option value="grp_M" selected>Member</option>
-                <option value="grp_A">Associate</option>
-                <option value="grp_G">Guest</option>
-                <option value="grp_I">Inactive</option>
-            </select>
-            <br>
-            <a href="javascript:editPerson('{{ emptyPerson.json }}');">Add New Person</a>
-            <br/>
-        {% endif %}
+        <div class="title">Personal Profile</div>
        
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                  
-                    <th>Contact</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            {% for person in people %}
-                <tr class="MemberGroup grp_{{ person.status }}">
-                    <td>
-                        <div class="membername">
-                            {{ person.lastName }}, {{ person.firstName }} 
-                        </div>
-                        <div class="memberaddress">
-                            {{ person.addressLine1 ~  (person.addressLine2 ? '<br>' ~ person.addressLine2 : '')}}<br>{{ person.city }}, {{ person.state }} {{ person.postal }}
-                        </div>
-                    </td>
-                    <td>
-                        <div class="memberphone">
-                            {{ person.phone }} {{ person.carrier ? '(' ~ person.carrier ~ ')' :''}}
-                        </div>
-                        <div class="memberemail">
-                            {{ person.email }}</td>
-                        </div>
-                    <td>
-                        <a href="javascript:editPerson('{{ person.json }}');">Edit</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+      
+        {% for person in people %}
+
+            <div class="membername">
+               Name: &nbsp;{{ person.lastName }}, {{ person.firstName }} 
+            </div>
+            <div class="memberaddress">
+                Address: &nbsp;{{ person.addressLine1 ~  (person.addressLine2 ? '&nbsp;' ~ person.addressLine2 : '')}}&nbsp;{{ person.city }}, {{ person.state }} {{ person.postal }}
+            </div>
+            <div class="memberphone">
+                Phone: &nbsp;{{ person.phone }} {{ person.carrier ? '(' ~ person.carrier ~ ')' :''}}
+            </div>
+            <div class="memberemail">
+                Email: {{ person.email }}
+            </div>
+            <div class="memberbirthdate">
+                Birth Date: &nbsp;{{ person.birthMonth }}/{{ person.birthDay }}
+            </div>
+            <div class="memberemergencycontact">
+               Emegergency Contact: &nbsp;{{ person.emergencyContact }} {{ person.emergencyContactPhone }}
+            </div>
+            
+            <br><br>
+            <div class="memberaction">
+                <a href="javascript:editPerson('{{ person.json }}');">Update Profile</a>
+            </div>
+           
+          
+        {% endfor %}
+       
     </div>
     
     <!-- Modal edit panel -->
     <div id="modalPopup" class="modal">
-        <form id="modalForm" class="modal-content animate" action="/admin/edit" method="post">
+        <form id="modalForm" class="modal-content animate" action="/profile/edit" method="post">
             <div class="container">
                 <div>
                     <button class="tabbtn" onclick="showtab(event, 'basic');">Basic</button>
@@ -180,8 +144,8 @@
                         <br> <span class="psw"><label for="personAddressLine1Choice">Address Line 1:</label> <input type="text" id="personAddressLine1Choice" name="personAddressLine1Choice" /></span>
                         <br> <span class="psw"><label for="personAddressLine2Choice">Address Line 2:</label> <input type="text" id="personAddressLine2Choice" name="personAddressLine2Choice" /></span>
                         <br> <span class="psw"><label for="personCityChoice">City:</label> <input type="text" id="personCityChoice" name="personCityChoice" /></span>
-                        <br> <span class="psw"><label for="personStateChoice">State:</label> <input type="text" id="personStateChoice" name="personStateChoice" /></span>
-                        <br> <span class="psw"><label for="personPostalChoice">Postal:</label> <input type="text" id="personPostalChoice" name="personPostalChoice" /></span>
+                        <br> <span class="psw"><label for="personStateChoice">State:</label> <input type="text" id="personStateChoice" name="personStateChoice" maxlength="2" /></span>
+                        <br> <span class="psw"><label for="personPostalChoice">Postal:</label> <input type="text" id="personPostalChoice" name="personPostalChoice" maxlength="5" /></span>
                         <br> <span class="psw"><label for="personPhoneChoice">Phone:</label> <input type="text" id="personPhoneChoice" name="personPhoneChoice" required /></span>
                         <br> <span class="psw"><label for="personCarrierChoice">Carrier:</label> <input type="text" id="personCarrierChoice" name="personCarrierChoice" /></span>
                         <br> <span class="psw"><label for="personEmailChoice">Email:</label> <input type="text" id="personEmailChoice" name="personEmailChoice" required /></span>
@@ -209,21 +173,21 @@
                         <br> <span class="psw"><label for="passwdChoice">Password:</label> <input type="password" id="passwdChoice" name="passwdChoice" /></span>
                     </div>
                     <div class="tabbed club">
+                        <br><b>PLEASE CONTACT TCEVA ADMINISTRTOR TO UPDATE CLUB INFORMATION.</b>.<br>
                         <span class="psw"><label for="renewYearChoice">Renew Year:</label>
-                            <input type="number" id="renewYearChoice" name="renewYearChoice" min="2019" step="1" max="2030" pattern="[0-9]*" /></span>
-                        <br> <span class="psw"><label for="statusChoice">Active Status:</label> <select id="statusChoice" name="statusChoice">
+                            <input type="number" id="renewYearChoice" name="renewYearChoice" min="2019" step="1" max="2030" pattern="[0-9]*" readonly /></span>
+                        <br> <span class="psw"><label for="statusChoice">Active Status:</label> <select id="statusChoice" name="statusChoice" class="readonly-select">
                             <option value="M" selected>Member</option>
                             <option value="A">Associate</option>
                             <option value="G">Guest</option>
                             <option value="I">Inactive</option>
                         </select></span>
                         <br><hr>
-                        Privileges
                         <br>
-                            <input id="adminChoice" name="adminChoice" type="checkbox"/><label class="shortLeft" for="adminChoice">Website Admin</label>&nbsp;
-                            <input id="copChoice" name="copChoice" type="checkbox"/><label class="shortLeft" for="copChoice">Signups</label>&nbsp;
-                            <input id="timeChoice" name="timeChoice" type="checkbox"/><label class="shortLeft" for="timeChoice">Time</label>&nbsp;
-                            <input id="eventsChoice" name="eventsChoice" type="checkbox"/><label class="shortLeft" for="eventsChoice">Events</label>
+                        <input id="adminChoice" name="adminChoice" type="checkbox" onclick="return false;"/><label class="shortLeft" for="adminChoice">Website Admin</label>&nbsp;
+                        <input id="copChoice" name="copChoice" type="checkbox" onclick="return false;"/><label class="shortLeft" for="copChoice">Signups</label>&nbsp;
+                        <input id="timeChoice" name="timeChoice" type="checkbox" onclick="return false;"/><label class="shortLeft" for="timeChoice">Time</label>&nbsp;
+                        <input id="eventsChoice" name="eventsChoice" type="checkbox" onclick="return false;"/><label class="shortLeft" for="eventsChoice">Events</label>
                         <br><hr>
                         Certifications
                         <br>
@@ -231,13 +195,13 @@
                             <span class="psw">
                                 <input type="hidden" id="Feature_{{ feature.name }}_idChoice" name="Feature_{{ feature.name }}_idChoice" value=""/>
                                 <div class="boxed">
-                                    <input type="checkbox" id="Feature_{{ feature.name }}_Choice" name="Feature_{{ feature.name }}_Choice" />
+                                    <input type="checkbox" id="Feature_{{ feature.name }}_Choice" name="Feature_{{ feature.name }}_Choice" onclick="return false;"/>
                                     <label class="shortLeft" for="Feature_{{ feature.name }}_Choice">{{ feature.name }}</label>
                                 </div>
                                 <label class="short" for="Feature_{{ feature.name }}_dateChoice">Date</label>
-                                <input type="date" id="Feature_{{ feature.name }}_dateChoice" name="Feature_{{ feature.name }}_dateChoice" />
+                                <input type="date" id="Feature_{{ feature.name }}_dateChoice" name="Feature_{{ feature.name }}_dateChoice" readonly onclick="return false;"/>
                                 <label class="short" for="Feature_{{ feature.name }}_valueChoice">ID</label>
-                                <input type="text" id="Feature_{{ feature.name }}_valueChoice" name="Feature_{{ feature.name }}_valueChoice" />
+                                <input type="text" id="Feature_{{ feature.name }}_valueChoice" name="Feature_{{ feature.name }}_valueChoice" readonly onclick="return false;"/>
                             </span>
                         {% endfor %}
                     </div>
@@ -250,10 +214,4 @@
             </div>
         </form>
     </div>
-    
-    <script>
-        {% if admin %}
-            showGroup();
-        {% endif %}
-    </script>
 {% endblock %}
