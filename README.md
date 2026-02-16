@@ -1,25 +1,27 @@
 # TCEVA-TS
 
-A modern web application built with Symfony 7.1, featuring a robust architecture with Doctrine ORM, Twig templating, and Symfony UX components.
+A modern web application built with Symfony 7.4, featuring a robust architecture with Doctrine ORM, Twig templating, and Symfony UX components.
 
-![PHP Version](https://img.shields.io/badge/PHP-%3E%3D8.2-777BB4?style=flat-square&logo=php)
-![Symfony Version](https://img.shields.io/badge/Symfony-7.1-000000?style=flat-square&logo=symfony)
+![PHP Version](https://img.shields.io/badge/PHP-%3E%3D8.4-777BB4?style=flat-square&logo=php)
+![Symfony Version](https://img.shields.io/badge/Symfony-7.4-000000?style=flat-square&logo=symfony)
+![Security](https://img.shields.io/badge/Security-Up%20to%20Date-green?style=flat-square)
 ![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)
 
 ## 🚀 Features
 
-- **Symfony 7.1** - Latest stable version of the Symfony framework
-- **Doctrine ORM** - Database abstraction and ORM with migration support
-- **Twig Templates** - Powerful templating engine
+- **Symfony 7.4** - Latest stable version with security updates
+- **Doctrine ORM 3.2** - Database abstraction and ORM with migration support
+- **Twig 3.23** - Powerful templating engine with latest security patches
 - **Symfony UX** - Modern JavaScript integration with Stimulus and Turbo
-- **Security** - Built-in authentication and authorization
+- **Security** - Built-in authentication and authorization with up-to-date security patches
 - **Mailer** - Email sending capabilities
 - **Asset Mapper** - Modern asset management without Node.js
-- **Testing Suite** - PHPUnit integration for comprehensive testing
+- **Testing Suite** - PHPUnit 9.6.34 integration for comprehensive testing
+- **User Profile Management** - Comprehensive profile editing with form validation
 
 ## 📋 Requirements
 
-- PHP >= 8.2
+- PHP >= 8.4
 - Composer
 - MySQL 8.0+
 - Symfony CLI (optional but recommended)
@@ -160,6 +162,30 @@ Execute migrations:
 ```bash
 php bin/console doctrine:migrations:migrate
 ```
+
+### Security Updates
+
+Check for security vulnerabilities:
+
+```bash
+composer audit
+```
+
+Update dependencies to fix security issues:
+
+```bash
+composer update --with-all-dependencies
+```
+
+**Recent Security Updates (February 2026)**:
+- Updated Symfony packages from 7.1.x to 7.4.x
+- Fixed 7 security advisories including:
+  - CVE-2024-50342 (symfony/http-client)
+  - CVE-2024-51736 (symfony/process)
+  - CVE-2024-50340 (symfony/runtime)
+  - CVE-2024-51996 (symfony/security-http)
+  - CVE-2024-51754, CVE-2024-51755 (twig/twig)
+  - CVE-2026-24765 (phpunit/phpunit)
 
 ## 🧪 Testing
 
