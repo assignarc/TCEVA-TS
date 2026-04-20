@@ -7,8 +7,6 @@ use App\Beans\ActionDefinition;
 use App\Beans\Person;
 use App\Exception\InvalidRequestException;
 use App\Services\CalendarViewService;
-use App\Traits\DatabaseAwareTrait;
-use App\Traits\LoggerAwareTrait;
 use App\Traits\MailerAwareTrait;
 use DateTime;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,8 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/action')]
 class ActionEditController extends BaseController
 {
-    use LoggerAwareTrait;
-    use DatabaseAwareTrait;
     use MailerAwareTrait;
     private $dateFormat = \App\Entity\Constants::DATE_FORMAT;
 

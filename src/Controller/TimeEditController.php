@@ -3,20 +3,19 @@
 namespace App\Controller;
 
 use App\Beans\Activity;
+use App\Beans\Person;
 use App\Exception\InvalidRequestException;
-use App\Service\DBQueries;
 use App\Services\ValidationPatterns;
 use App\Traits\DatabaseAwareTrait;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use App\Traits\MailerAwareTrait;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/time')]
 class TimeEditController extends BaseController
 {
     use DatabaseAwareTrait;
+    use MailerAwareTrait;
 
     #[Route('/edit', name: 'app_TimeEdit', methods: ['GET','POST'])]
     public function timeEdit(): Response
@@ -120,5 +119,33 @@ class TimeEditController extends BaseController
             'activities' => $activities,
           
         ]);
+    }
+
+    /**
+     * TODO: Email sent is not wired yet. 
+     */
+    private $actionBody = " <html><body> "
+        . " <b><i>This email was auto-generated.</b></i><br>"
+        . " <h4>DO NOT REPLY TO THIS EMAIL</h4><br>"
+        . " This email is to confirm time recorded as following,<br>"
+        . " <br>"
+        . " Activity      :<b>%actionName%</b> <br>"
+        . " Volunteer(s)  :<b>%actionVolunteers%</b> <br>"
+        . " Datetime      :<b>%actionDateTime%</b> <br>"
+        . " Note          :<b>%actionNaote%</b> <br>"
+        . " <br> "
+        . " Thank you! <br><br>"
+        . " TCEVA. "
+        . " </body></html>";
+    private function emailTimeOperation(Person $person, Activity $activity, $hours)
+    {
+        
+        $body = str_replace("%actionName%", $activity->getActivityName(), $this->actionBody);
+        $body = str_replace("%activityType%", $$activity->getActivityId(), $body);
+        $body = str_replace("%actionDateTime%", $activity->getDay()->format(\App\Entity\Constants::DATE_FORMAT), $body);
+        $body = str_replace("%notes%", $activity->getNote(), $body);
+        $body = str_replace("%hours%", $hours, $body);
+
+        $this->sendEmail($person->getEmail(), "TCEVA Time Record", $body);
     }
 }

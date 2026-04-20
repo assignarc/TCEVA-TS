@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Beans\PersonFeature;
 use App\Traits\DatabaseAwareTrait;
+use App\Traits\MailerAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -13,7 +14,6 @@ use App\Beans\Person;
 use App\Entity\Constants;
 use App\Exception\InvalidRequestException;
 use App\Services\ValidationPatterns;
-use RuntimeException;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -22,6 +22,7 @@ use Exception;
 class ProfileEditController extends BaseController
 {
     use DatabaseAwareTrait;
+    use MailerAwareTrait;
 
     private $allFeatures;
 
@@ -144,6 +145,7 @@ class ProfileEditController extends BaseController
                         $this->queryService->updatePersonAccess($per);
                         $this->logAlert("Password resetted for " . $per->getLogin() . " | by " . $loggedInUser->getLogin());
                     }
+                    $this->emailProfileOperation("Update", $per);
                 } else {
                     if ($person->isUserAdmin()) {
                         $people = $this->queryService->getPersons(-1);
@@ -188,5 +190,16 @@ class ProfileEditController extends BaseController
             'features' => $features,
             'memberType' => $memberType,
         ]);
+    }
+    private $actionBody = " <html><body> "
+        . " <b><i>This email was auto-generated.</b></i><br>"
+        . " <h4>DO NOT REPLY TO THIS EMAIL</h4><br>"
+        . " This email is to confirm that you have updated your profile.<br>"
+        . " Thank you! <br><br>"
+        . " TCEVA. "
+        . " </body></html>";
+    private function emailProfileOperation(string $actionCommand, Person $person)
+    {
+        $this->sendEmail($person->getEmail(), "TCEVA Profile Updated", $this->actionBody);
     }
 }
