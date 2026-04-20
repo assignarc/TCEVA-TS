@@ -8,7 +8,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\Attribute\Required;
 
 trait DatabaseAwareTrait{
-    use LoggerAwareTrait;
     
     private QueryService $queryService;
 

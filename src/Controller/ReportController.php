@@ -3,7 +3,6 @@ namespace App\Controller;
 
 use App\Services\ReportDatesService;
 use App\Traits\DatabaseAwareTrait;
-use App\Traits\LoggerAwareTrait;
 use App\Traits\MailerAwareTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

@@ -61,6 +61,10 @@ cp .env .env.local
 
 Update the following configuration in your `.env.local` file:
 
+Check the environment setup with command below. 
+
+php bin/console debug:dotenv
+
 #### Database Configuration
 
 ```env
@@ -178,6 +182,7 @@ composer update --with-all-dependencies
 ```
 
 **Recent Security Updates (February 2026)**:
+
 - Updated Symfony packages from 7.1.x to 7.4.x
 - Fixed 7 security advisories including:
   - CVE-2024-50342 (symfony/http-client)
